@@ -165,40 +165,12 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            position: relative;
+            cursor: pointer;
         }
         
         .website-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .delete-website-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(231, 76, 60, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .website-card:hover .delete-website-btn {
-            opacity: 1;
-        }
-        
-        .delete-website-btn:hover {
-            background: #c0392b;
-            transform: scale(1.1);
         }
         
         .card-header {
@@ -228,7 +200,7 @@
         .card-desc {
             color: #666;
             font-size: 0.9rem;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.5;
             flex-grow: 1;
         }
@@ -317,6 +289,87 @@
             padding: 0 5px;
         }
         
+        /* Confirmation Modal */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        
+        .confirmation-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .confirmation-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .confirmation-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .confirmation-message {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .confirmation-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .btn-cancel {
+            padding: 10px 25px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-confirm {
+            padding: 10px 25px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-confirm:hover {
+            background: #c0392b;
+        }
+        
         /* Add Website Modal */
         .modal-overlay {
             position: fixed;
@@ -333,7 +386,7 @@
         
         .modal-content {
             background: white;
-            border-radius: 15px;
+            border-radius: 10px; /* Changed from 15px to 10% corners */
             padding: 30px;
             width: 90%;
             max-width: 600px;
@@ -501,6 +554,10 @@
         .website-item-url {
             font-size: 0.85rem;
             color: #666;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         .delete-item-btn {
@@ -599,18 +656,7 @@
             font-size: 2.2rem;
             margin-bottom: 20px;
             color: #1e3c72;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
+            /* Removed pulse animation */
         }
         
         .login-icon {
@@ -618,6 +664,18 @@
             z-index: 2;
             margin-bottom: 30px;
         }
+        
+        /* Color classes */
+        .vali-bg { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .rezidentura-bg { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .shift-bg { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .deutsch-bg { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .mcg-bg { background: linear-gradient(135deg, #1abc9c, #16a085); }
+        .custom1-bg { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .custom2-bg { background: linear-gradient(135deg, #34495e, #2c3e50); }
+        .custom3-bg { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+        .custom4-bg { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .custom5-bg { background: linear-gradient(135deg, #1abc9c, #16a085); }
         
         @media (max-width: 1200px) {
             .websites-grid {
@@ -685,7 +743,7 @@
                 padding: 20px;
             }
             
-            .popup-notification {
+            .popup-notification, .confirmation-modal {
                 left: 20px;
                 right: 20px;
                 top: 10px;
@@ -714,6 +772,19 @@
             <i class="fas fa-exclamation-circle"></i>
             <span id="popupMessage">არასწორი მომხმარებელი ან პაროლი</span>
             <button class="popup-close" id="popupClose">&times;</button>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="confirmation-content">
+            <div class="confirmation-icon" id="confirmationIcon"></div>
+            <h3 class="confirmation-title" id="confirmationTitle">დადასტურება</h3>
+            <p class="confirmation-message" id="confirmationMessage">დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?</p>
+            <div class="confirmation-actions">
+                <button class="btn-cancel" id="cancelConfirmBtn">გაუქმება</button>
+                <button class="btn-confirm" id="confirmBtn">დადასტურება</button>
+            </div>
         </div>
     </div>
     
@@ -835,13 +906,19 @@
         const modalTabs = document.querySelectorAll('.modal-tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const modalTitle = document.getElementById('modalTitle');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmationIcon = document.getElementById('confirmationIcon');
+        const confirmationTitle = document.getElementById('confirmationTitle');
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
         
         // Correct credentials
         const correctUsername = 'alex';
         const correctPassword = '2911';
         const userName = 'ალექსი შოგირაძე';
         
-        // Vector icons database - 30 different vector icons (as SVG data URIs)
+        // Vector icons database
         const vectorIcons = [
             { id: 'money', name: 'ფული', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z'/%3E%3C/svg%3E" },
             { id: 'exam', name: 'გამოცდა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E" },
@@ -852,46 +929,21 @@
             { id: 'settings', name: 'პარამეტრები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E" },
             { id: 'book', name: 'წიგნი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z'/%3E%3C/svg%3E" },
             { id: 'chart', name: 'გრაფიკი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z'/%3E%3C/svg%3E" },
-            { id: 'mail', name: 'ფოსტა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E" },
-            { id: 'bell', name: 'შეტყობინება', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3C/svg%3E" },
-            { id: 'star', name: 'ვარსკვლავი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E" },
-            { id: 'heart', name: 'გული', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" }
+            { id: 'mail', name: 'ფოსტა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E" }
         ];
         
         // Color classes for icons
         const colorClasses = [
-            'vali-bg', 'rezidentura-bg', 'shift-bg', 'deutsch-bg', 'mcg-bg'
+            'vali-bg', 'rezidentura-bg', 'shift-bg', 'deutsch-bg', 'mcg-bg',
+            'custom1-bg', 'custom2-bg', 'custom3-bg', 'custom4-bg', 'custom5-bg'
         ];
         
-        // Color mapping for the color classes
-        const colorMap = {
-            'vali-bg': 'linear-gradient(135deg, #27ae60, #2ecc71)',
-            'rezidentura-bg': 'linear-gradient(135deg, #3498db, #2980b9)',
-            'shift-bg': 'linear-gradient(135deg, #9b59b6, #8e44ad)',
-            'deutsch-bg': 'linear-gradient(135deg, #e67e22, #d35400)',
-            'mcg-bg': 'linear-gradient(135deg, #1abc9c, #16a085)'
-        };
-        
-        // Apply color classes as background
-        document.addEventListener('DOMContentLoaded', function() {
-            // This will be applied via CSS classes
-            const style = document.createElement('style');
-            style.textContent = `
-                .vali-bg { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-                .rezidentura-bg { background: linear-gradient(135deg, #3498db, #2980b9); }
-                .shift-bg { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-                .deutsch-bg { background: linear-gradient(135deg, #e67e22, #d35400); }
-                .mcg-bg { background: linear-gradient(135deg, #1abc9c, #16a085); }
-            `;
-            document.head.appendChild(style);
-        });
-        
-        // Initialize website data - NO EXTERNAL URLs in initialization
+        // Initialize website data with full URLs for default websites
         let websites = [
             {
                 id: 1,
                 name: 'ვალი',
-                url: 'vali', // Just the name, not full URL
+                url: 'https://uunimed.github.io/vali/',
                 description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
                 icon: 'money',
                 colorClass: 'vali-bg'
@@ -899,7 +951,7 @@
             {
                 id: 2,
                 name: 'რეზიდენტურა',
-                url: 'rezidentura',
+                url: 'https://uunimed.github.io/rezidentura/',
                 description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
                 icon: 'exam',
                 colorClass: 'rezidentura-bg'
@@ -907,7 +959,7 @@
             {
                 id: 3,
                 name: 'ცვლა',
-                url: 'shift',
+                url: 'https://uunimed.github.io/shift/',
                 description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
                 icon: 'calendar',
                 colorClass: 'shift-bg'
@@ -915,7 +967,7 @@
             {
                 id: 4,
                 name: 'გერმანული',
-                url: 'deutsch',
+                url: 'https://uunimed.github.io/deutsch/',
                 description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
                 icon: 'language',
                 colorClass: 'deutsch-bg'
@@ -923,7 +975,7 @@
             {
                 id: 5,
                 name: 'MCG',
-                url: 'mcg',
+                url: 'https://uunimed.github.io/mcg/',
                 description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
                 icon: 'users',
                 colorClass: 'mcg-bg'
@@ -933,6 +985,7 @@
         let nextWebsiteId = 6;
         let selectedIcon = 'money';
         let selectedColorClass = 'vali-bg';
+        let websiteToDelete = null;
         
         // Create floating animation elements
         function createLoginAnimation() {
@@ -943,14 +996,12 @@
                 const element = document.createElement('div');
                 element.classList.add('floating-element');
                 
-                // Random properties
                 const size = Math.random() * 30 + 10;
                 const left = Math.random() * 100;
                 const top = Math.random() * 100;
                 const delay = Math.random() * 5;
                 const duration = Math.random() * 3 + 4;
                 
-                // Apply properties
                 element.style.width = `${size}px`;
                 element.style.height = `${size}px`;
                 element.style.left = `${left}%`;
@@ -958,7 +1009,6 @@
                 element.style.animationDelay = `${delay}s`;
                 element.style.animationDuration = `${duration}s`;
                 
-                // Random color
                 const colors = [
                     'rgba(30, 60, 114, 0.1)',
                     'rgba(42, 82, 152, 0.08)',
@@ -995,10 +1045,7 @@
                 iconSelection.appendChild(iconOption);
                 
                 iconOption.addEventListener('click', function() {
-                    // Remove selected class from all options
                     document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-                    
-                    // Add selected class to clicked option
                     this.classList.add('selected');
                     selectedIcon = this.getAttribute('data-icon');
                     selectedColorClass = this.getAttribute('data-color');
@@ -1016,13 +1063,8 @@
                 showLoginForm();
             }
             
-            // Create login animation
             createLoginAnimation();
-            
-            // Load saved websites
             loadSavedWebsites();
-            
-            // Render icon selection
             renderIconSelection();
         });
         
@@ -1035,7 +1077,6 @@
             }
             popupNotification.style.display = 'block';
             
-            // Auto hide after 5 seconds
             setTimeout(() => {
                 popupNotification.style.display = 'none';
             }, 5000);
@@ -1044,6 +1085,27 @@
         // Close popup notification
         popupClose.addEventListener('click', function() {
             popupNotification.style.display = 'none';
+        });
+        
+        // Show confirmation modal
+        function showConfirmation(message, iconSvg, onConfirm) {
+            confirmationMessage.textContent = message;
+            confirmationIcon.style.backgroundImage = `url("${iconSvg}")`;
+            confirmationModal.style.display = 'flex';
+            
+            const confirmHandler = function() {
+                onConfirm();
+                confirmationModal.style.display = 'none';
+                confirmBtn.removeEventListener('click', confirmHandler);
+            };
+            
+            confirmBtn.addEventListener('click', confirmHandler);
+        }
+        
+        // Close confirmation modal
+        cancelConfirmBtn.addEventListener('click', function() {
+            confirmationModal.style.display = 'none';
+            websiteToDelete = null;
         });
         
         // Login functionality
@@ -1057,13 +1119,9 @@
             }
             
             if (username === correctUsername && password === correctPassword) {
-                // Save login state
                 localStorage.setItem('isLoggedIn', 'true');
-                
-                // Show protected content
                 showProtectedContent();
             } else {
-                // Show error popup
                 showPopup('არასწორი მომხმარებელი ან პაროლი');
                 usernameInput.value = '';
                 passwordInput.value = '';
@@ -1094,7 +1152,6 @@
         });
         
         function switchTab(tabId) {
-            // Update active tab
             modalTabs.forEach(tab => {
                 tab.classList.remove('active');
                 if (tab.getAttribute('data-tab') === tabId) {
@@ -1102,7 +1159,6 @@
                 }
             });
             
-            // Update active content
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === tabId) {
@@ -1110,7 +1166,6 @@
                 }
             });
             
-            // Update modal title
             if (tabId === 'delete-tab') {
                 modalTitle.textContent = 'ვებსაიტის წაშლა';
                 renderDeleteWebsiteList();
@@ -1142,7 +1197,6 @@
                 return;
             }
             
-            // Validate URL format
             let formattedUrl = url.trim();
             if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
                 formattedUrl = 'https://' + formattedUrl;
@@ -1155,7 +1209,6 @@
                 return;
             }
             
-            // Add new website
             const newWebsite = {
                 id: nextWebsiteId++,
                 name: name,
@@ -1169,7 +1222,6 @@
             saveWebsites();
             renderWebsites();
             
-            // Close modal and reset form
             websiteModal.style.display = 'none';
             addWebsiteForm.reset();
             
@@ -1198,11 +1250,11 @@
                 const websiteItem = document.createElement('div');
                 websiteItem.className = 'delete-website-item';
                 
-                const iconInfo = vectorIcons.find(icon => icon.id === website.icon);
+                const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
                 
                 websiteItem.innerHTML = `
                     <div class="website-item-info">
-                        <div class="vector-icon website-item-icon ${website.colorClass}" style="background-image: url('${iconInfo ? iconInfo.svg : vectorIcons[0].svg}')"></div>
+                        <div class="vector-icon website-item-icon ${website.colorClass}" style="background-image: url('${iconInfo.svg}')"></div>
                         <div>
                             <div class="website-item-name">${website.name}</div>
                             <div class="website-item-url">${website.url}</div>
@@ -1214,13 +1266,17 @@
                 deleteWebsiteList.appendChild(websiteItem);
             });
             
-            // Add event listeners to delete buttons
             document.querySelectorAll('.delete-item-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.getAttribute('data-id'));
-                    if (confirm('დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?')) {
-                        deleteWebsite(id);
-                    }
+                    const website = websites.find(w => w.id === id);
+                    const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
+                    
+                    showConfirmation(
+                        'დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?',
+                        iconInfo.svg,
+                        () => deleteWebsite(id)
+                    );
                 });
             });
         }
@@ -1235,35 +1291,25 @@
                 card.setAttribute('data-id', website.id);
                 
                 // Find icon SVG
-                const iconInfo = vectorIcons.find(icon => icon.id === website.icon);
-                const iconSvg = iconInfo ? iconInfo.svg : vectorIcons[0].svg;
+                const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
                 
                 card.innerHTML = `
-                    <button class="delete-website-btn" data-id="${website.id}">
-                        <i class="fas fa-times"></i>
-                    </button>
                     <div class="card-header ${website.colorClass}">
-                        <div class="vector-icon" style="background-image: url('${iconSvg}')"></div>
+                        <div class="vector-icon" style="background-image: url('${iconInfo.svg}')"></div>
                     </div>
                     <div class="card-content">
                         <h3 class="card-title">${website.name}</h3>
                         <p class="card-desc">${website.description}</p>
-                        <a href="${website.url}" class="btn" target="_blank">ვებსაიტზე გადასვლა</a>
                     </div>
                 `;
                 
-                websitesGrid.appendChild(card);
-            });
-            
-            // Add event listeners to delete buttons on cards
-            document.querySelectorAll('.delete-website-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const id = parseInt(this.getAttribute('data-id'));
-                    if (confirm('დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?')) {
-                        deleteWebsite(id);
-                    }
+                // Click entire card to navigate to website (same window)
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = website.url;
                 });
+                
+                websitesGrid.appendChild(card);
             });
         }
         
@@ -1301,10 +1347,8 @@
             loginMessage.style.display = 'none';
             protectedContent.style.display = 'block';
             
-            // Render websites
             renderWebsites();
             
-            // Animate cards
             const cards = document.querySelectorAll('.website-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
@@ -1324,12 +1368,10 @@
             loginMessage.style.display = 'flex';
             protectedContent.style.display = 'none';
             
-            // Clear inputs
             usernameInput.value = '';
             passwordInput.value = '';
             usernameInput.focus();
             
-            // Responsive adjustment
             if (window.innerWidth <= 900) {
                 authForm.style.flexDirection = 'column';
                 authForm.style.alignItems = 'center';
