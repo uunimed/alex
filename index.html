@@ -289,7 +289,7 @@
             padding: 0 5px;
         }
         
-        /* Confirmation Modal */
+        /* Confirmation Modal - UPDATED DESIGN */
         .confirmation-modal {
             position: fixed;
             top: 0;
@@ -311,6 +311,7 @@
             max-width: 400px;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-top: 5px solid #e74c3c;
         }
         
         .confirmation-icon {
@@ -326,12 +327,14 @@
             font-size: 1.3rem;
             color: #2c3e50;
             margin-bottom: 15px;
+            font-weight: 600;
         }
         
         .confirmation-message {
             color: #666;
             margin-bottom: 25px;
             line-height: 1.5;
+            font-size: 1rem;
         }
         
         .confirmation-actions {
@@ -349,10 +352,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex: 1;
         }
         
         .btn-cancel:hover {
             background: #7f8c8d;
+            transform: translateY(-2px);
         }
         
         .btn-confirm {
@@ -364,13 +369,15 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            flex: 1;
         }
         
         .btn-confirm:hover {
             background: #c0392b;
+            transform: translateY(-2px);
         }
         
-        /* Add Website Modal */
+        /* Add Website Modal - FIXED CORNERS */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -386,7 +393,7 @@
         
         .modal-content {
             background: white;
-            border-radius: 10px; /* Changed from 15px to 10% corners */
+            border-radius: 12px; /* All corners have same radius now */
             padding: 30px;
             width: 90%;
             max-width: 600px;
@@ -423,10 +430,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            border-radius: 6px 6px 0 0; /* All tabs have rounded corners */
         }
         
         .modal-tab.active {
             color: #1e3c72;
+            background: rgba(30, 60, 114, 0.1);
         }
         
         .modal-tab.active::after {
@@ -441,6 +450,7 @@
         
         .modal-tab:hover {
             color: #1e3c72;
+            background: rgba(30, 60, 114, 0.05);
         }
         
         .tab-content {
@@ -525,6 +535,8 @@
             padding: 12px 15px;
             border-bottom: 1px solid #f0f0f0;
             transition: background 0.3s ease;
+            border-radius: 6px;
+            margin-bottom: 8px;
         }
         
         .delete-website-item:hover {
@@ -533,6 +545,7 @@
         
         .delete-website-item:last-child {
             border-bottom: none;
+            margin-bottom: 0;
         }
         
         .website-item-info {
@@ -544,6 +557,7 @@
         .website-item-icon {
             width: 30px;
             height: 30px;
+            border-radius: 6px;
         }
         
         .website-item-name {
@@ -574,6 +588,7 @@
         
         .delete-item-btn:hover {
             background: #c0392b;
+            transform: translateY(-2px);
         }
         
         .modal-actions {
@@ -596,6 +611,7 @@
         
         .btn-secondary:hover {
             background: #7f8c8d;
+            transform: translateY(-2px);
         }
         
         .btn-primary {
@@ -611,15 +627,27 @@
         
         .btn-primary:hover {
             background: #2a5298;
+            transform: translateY(-2px);
         }
         
-        /* Vector Icons */
+        /* Vector Icons - FIXED */
         .vector-icon {
             width: 70px;
             height: 70px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            filter: brightness(0) invert(1); /* Makes SVG white */
+        }
+        
+        /* For smaller icons */
+        .small-icon {
+            width: 30px;
+            height: 30px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: brightness(0) invert(1); /* Makes SVG white */
         }
         
         /* Login Animation */
@@ -656,7 +684,6 @@
             font-size: 2.2rem;
             margin-bottom: 20px;
             color: #1e3c72;
-            /* Removed pulse animation */
         }
         
         .login-icon {
@@ -674,7 +701,7 @@
         .custom1-bg { background: linear-gradient(135deg, #e74c3c, #c0392b); }
         .custom2-bg { background: linear-gradient(135deg, #34495e, #2c3e50); }
         .custom3-bg { background: linear-gradient(135deg, #f1c40f, #f39c12); }
-        .custom4-bg { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .custom4-bg { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
         .custom5-bg { background: linear-gradient(135deg, #1abc9c, #16a085); }
         
         @media (max-width: 1200px) {
@@ -775,7 +802,7 @@
         </div>
     </div>
     
-    <!-- Confirmation Modal -->
+    <!-- Confirmation Modal - UPDATED DESIGN -->
     <div class="confirmation-modal" id="confirmationModal">
         <div class="confirmation-content">
             <div class="confirmation-icon" id="confirmationIcon"></div>
@@ -918,19 +945,37 @@
         const correctPassword = '2911';
         const userName = 'ალექსი შოგირაძე';
         
-        // Vector icons database
+        // SIMPLE VECTOR ICONS - Using Font Awesome classes instead of SVG
         const vectorIcons = [
-            { id: 'money', name: 'ფული', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z'/%3E%3C/svg%3E" },
-            { id: 'exam', name: 'გამოცდა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E" },
-            { id: 'calendar', name: 'კალენდარი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM12 10c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8.5H11V15h1.5v3.5zm0-4.5H11V10h1.5v4z'/%3E%3C/svg%3E" },
-            { id: 'language', name: 'ენა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z'/%3E%3C/svg%3E" },
-            { id: 'users', name: 'მომხმარებლები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E" },
-            { id: 'home', name: 'მთავარი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E" },
-            { id: 'settings', name: 'პარამეტრები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E" },
-            { id: 'book', name: 'წიგნი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z'/%3E%3C/svg%3E" },
-            { id: 'chart', name: 'გრაფიკი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z'/%3E%3C/svg%3E" },
-            { id: 'mail', name: 'ფოსტა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E" }
+            { id: 'money', name: 'ფული', iconClass: 'fas fa-money-bill-wave' },
+            { id: 'exam', name: 'გამოცდა', iconClass: 'fas fa-file-alt' },
+            { id: 'calendar', name: 'კალენდარი', iconClass: 'fas fa-calendar-alt' },
+            { id: 'language', name: 'ენა', iconClass: 'fas fa-language' },
+            { id: 'users', name: 'მომხმარებლები', iconClass: 'fas fa-users' },
+            { id: 'home', name: 'მთავარი', iconClass: 'fas fa-home' },
+            { id: 'settings', name: 'პარამეტრები', iconClass: 'fas fa-cog' },
+            { id: 'book', name: 'წიგნი', iconClass: 'fas fa-book' },
+            { id: 'chart', name: 'გრაფიკი', iconClass: 'fas fa-chart-bar' },
+            { id: 'mail', name: 'ფოსტა', iconClass: 'fas fa-envelope' },
+            { id: 'bell', name: 'შეტყობინება', iconClass: 'fas fa-bell' },
+            { id: 'star', name: 'ვარსკვლავი', iconClass: 'fas fa-star' },
+            { id: 'heart', name: 'გული', iconClass: 'fas fa-heart' },
+            { id: 'cloud', name: 'ღრუბელი', iconClass: 'fas fa-cloud' },
+            { id: 'camera', name: 'კამერა', iconClass: 'fas fa-camera' },
+            { id: 'music', name: 'მუსიკა', iconClass: 'fas fa-music' },
+            { id: 'video', name: 'ვიდეო', iconClass: 'fas fa-video' },
+            { id: 'phone', name: 'ტელეფონი', iconClass: 'fas fa-phone' },
+            { id: 'map', name: 'რუკა', iconClass: 'fas fa-map' },
+            { id: 'shopping', name: 'შოპინგი', iconClass: 'fas fa-shopping-cart' },
+            { id: 'game', name: 'თამაში', iconClass: 'fas fa-gamepad' },
+            { id: 'code', name: 'კოდი', iconClass: 'fas fa-code' },
+            { id: 'database', name: 'ბაზა', iconClass: 'fas fa-database' },
+            { id: 'shield', name: 'ფარი', iconClass: 'fas fa-shield-alt' },
+            { id: 'wifi', name: 'ვაიფაი', iconClass: 'fas fa-wifi' }
         ];
+        
+        // Simple delete confirmation icon
+        const deleteIconSVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Cpath d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'/%3E%3C/svg%3E";
         
         // Color classes for icons
         const colorClasses = [
@@ -1035,13 +1080,12 @@
                 iconOption.setAttribute('data-color', colorClasses[index % colorClasses.length]);
                 iconOption.setAttribute('title', icon.name);
                 
-                const iconSvg = document.createElement('div');
-                iconSvg.className = 'vector-icon';
-                iconSvg.style.backgroundImage = `url("${icon.svg}")`;
-                iconSvg.style.width = '30px';
-                iconSvg.style.height = '30px';
+                // Use Font Awesome icon
+                const iconElement = document.createElement('i');
+                iconElement.className = `${icon.iconClass} fa-2x`;
+                iconElement.style.color = 'white';
                 
-                iconOption.appendChild(iconSvg);
+                iconOption.appendChild(iconElement);
                 iconSelection.appendChild(iconOption);
                 
                 iconOption.addEventListener('click', function() {
@@ -1088,9 +1132,9 @@
         });
         
         // Show confirmation modal
-        function showConfirmation(message, iconSvg, onConfirm) {
-            confirmationMessage.textContent = message;
-            confirmationIcon.style.backgroundImage = `url("${iconSvg}")`;
+        function showConfirmation(websiteName, onConfirm) {
+            confirmationMessage.textContent = `დარწმუნებული ხართ, რომ გსურთ ვებსაიტის "${websiteName}" წაშლა?`;
+            confirmationIcon.style.backgroundImage = `url("${deleteIconSVG}")`;
             confirmationModal.style.display = 'flex';
             
             const confirmHandler = function() {
@@ -1254,7 +1298,9 @@
                 
                 websiteItem.innerHTML = `
                     <div class="website-item-info">
-                        <div class="vector-icon website-item-icon ${website.colorClass}" style="background-image: url('${iconInfo.svg}')"></div>
+                        <div class="${website.colorClass}" style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="${iconInfo.iconClass}" style="color: white; font-size: 1.2rem;"></i>
+                        </div>
                         <div>
                             <div class="website-item-name">${website.name}</div>
                             <div class="website-item-url">${website.url}</div>
@@ -1267,14 +1313,13 @@
             });
             
             document.querySelectorAll('.delete-item-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const id = parseInt(this.getAttribute('data-id'));
                     const website = websites.find(w => w.id === id);
-                    const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
                     
                     showConfirmation(
-                        'დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?',
-                        iconInfo.svg,
+                        website.name,
                         () => deleteWebsite(id)
                     );
                 });
@@ -1290,12 +1335,12 @@
                 card.className = 'website-card';
                 card.setAttribute('data-id', website.id);
                 
-                // Find icon SVG
+                // Find icon info
                 const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
                 
                 card.innerHTML = `
                     <div class="card-header ${website.colorClass}">
-                        <div class="vector-icon" style="background-image: url('${iconInfo.svg}')"></div>
+                        <i class="${iconInfo.iconClass} fa-3x" style="color: white;"></i>
                     </div>
                     <div class="card-content">
                         <h3 class="card-title">${website.name}</h3>
