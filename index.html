@@ -891,21 +891,16 @@
             </div>
         </header>
         
-<div class="login-message" id="loginMessage">
-    <div class="login-animation" id="loginAnimation"></div>
-    
-    <div class="login-icon">
-        <i class="fas fa-lock fa-4x" style="color: #1e3c72;"></i>
-    </div>
-    
-    <h2 class="login-title">გთხოვთ შეხვიდეთ სისტემაში</h2>
-    <p style="color: #666; margin-bottom: 30px; position: relative; z-index: 2;">ვებსაიტების სანახავად საჭიროა ავტორიზაცია</p>
-    
-    <!-- ADD THE RESET BUTTON HERE -->
-    <button onclick="resetToDefault()" style="margin-top: 20px; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; position: relative; z-index: 2;">
-        აღდგენა ნაგულისხმევი ვებსაიტები
-    </button>
-</div>
+        <div class="login-message" id="loginMessage">
+            <div class="login-animation" id="loginAnimation"></div>
+            
+            <div class="login-icon">
+                <i class="fas fa-lock fa-4x" style="color: #1e3c72;"></i>
+            </div>
+            
+            <h2 class="login-title">გთხოვთ შეხვიდეთ სისტემაში</h2>
+            <p style="color: #666; margin-bottom: 30px; position: relative; z-index: 2;">ვებსაიტების სანახავად საჭიროა ავტორიზაცია</p>
+        </div>
         
         <div class="protected-content" id="protectedContent">
             <div class="websites-grid" id="websitesGrid">
@@ -1412,57 +1407,6 @@
             });
         }
         
-        function resetToDefault() {
-    // Reset to default websites
-    websites = [
-        {
-            id: 1,
-            name: 'ვალი',
-            url: 'https://uunimed.github.io/vali/',
-            description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
-            icon: 'money',
-            colorClass: 'vali-bg'
-        },
-        {
-            id: 2,
-            name: 'რეზიდენტურა',
-            url: 'https://uunimed.github.io/rezidentura/',
-            description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
-            icon: 'exam',
-            colorClass: 'rezidentura-bg'
-        },
-        {
-            id: 3,
-            name: 'ცვლა',
-            url: 'https://uunimed.github.io/shift/',
-            description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
-            icon: 'calendar',
-            colorClass: 'shift-bg'
-        },
-        {
-            id: 4,
-            name: 'გერმანული',
-            url: 'https://uunimed.github.io/deutsch/',
-            description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
-            icon: 'language',
-            colorClass: 'deutsch-bg'
-        },
-        {
-            id: 5,
-            name: 'MCG',
-            url: 'https://uunimed.github.io/mcg/',
-            description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
-            icon: 'users',
-            colorClass: 'mcg-bg'
-        }
-    ];
-    
-    nextWebsiteId = 6;
-    saveWebsites();
-    renderWebsites();
-    alert('ვებსაიტები წარმატებით აღდგა!');
-}
-
         function showLoginForm() {
             authForm.style.display = 'flex';
             userInfo.style.display = 'none';
