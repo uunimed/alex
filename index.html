@@ -1097,20 +1097,23 @@
             });
         }
         
-        // Check if user is already logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            
-            if (isLoggedIn) {
-                showProtectedContent();
-            } else {
-                showLoginForm();
-            }
-            
-            createLoginAnimation();
-            loadSavedWebsites();
-            renderIconSelection();
-        });
+// Check if user is already logged in
+document.addEventListener('DOMContentLoaded', function() {
+    // FIRST: Load saved websites
+    loadSavedWebsites();
+    
+    // THEN: Check login status
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    
+    if (isLoggedIn) {
+        showProtectedContent();
+    } else {
+        showLoginForm();
+    }
+    
+    createLoginAnimation();
+    renderIconSelection();
+});
         
         // Show popup notification
         function showPopup(message, isSuccess = false) {
@@ -1364,48 +1367,133 @@
             localStorage.setItem('nextWebsiteId', nextWebsiteId.toString());
         }
         
-        // Load websites from localStorage
-        function loadSavedWebsites() {
-            const savedWebsites = localStorage.getItem('websites');
-            const savedNextId = localStorage.getItem('nextWebsiteId');
-            
-            if (savedWebsites) {
-                websites = JSON.parse(savedWebsites);
-            }
-            
-            if (savedNextId) {
-                nextWebsiteId = parseInt(savedNextId);
-            }
+// Load websites from localStorage
+function loadSavedWebsites() {
+    const savedWebsites = localStorage.getItem('websites');
+    const savedNextId = localStorage.getItem('nextWebsiteId');
+    
+    if (savedWebsites) {
+        websites = JSON.parse(savedWebsites);
+    }
+    
+    if (savedNextId) {
+        nextWebsiteId = parseInt(savedNextId);
+    }
+    
+    // AUTO-RESTORE: Check if we have the 5 default websites
+    // If not, restore them automatically
+    const defaultWebsiteNames = ['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'];
+    const hasAllDefaults = defaultWebsiteNames.every(name => 
+        websites.some(website => website.name === name)
+    );
+    
+    if (!hasAllDefaults || websites.length === 0) {
+        console.log('Restoring default websites...');
+        restoreDefaultWebsites();
+    }
+    
+    // Don't render websites here - wait for login
+}
+
+// Function to restore default websites
+// Function to restore default websites
+function restoreDefaultWebsites() {
+    // Keep any existing custom websites
+    const customWebsites = websites.filter(website => 
+        !['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'].includes(website.name)
+    );
+    
+    // Default websites
+    const defaultWebsites = [
+        {
+            id: 1,
+            name: 'ვალი',
+            url: 'https://uunimed.github.io/vali/',
+            description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
+            icon: 'money',
+            colorClass: 'vali-bg'
+        },
+        {
+            id: 2,
+            name: 'რეზიდენტურა',
+            url: 'https://uunimed.github.io/rezidentura/',
+            description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
+            icon: 'exam',
+            colorClass: 'rezidentura-bg'
+        },
+        {
+            id: 3,
+            name: 'ცვლა',
+            url: 'https://uunimed.github.io/shift/',
+            description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
+            icon: 'calendar',
+            colorClass: 'shift-bg'
+        },
+        {
+            id: 4,
+            name: 'გერმანული',
+            url: 'https://uunimed.github.io/deutsch/',
+            description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
+            icon: 'language',
+            colorClass: 'deutsch-bg'
+        },
+        {
+            id: 5,
+            name: 'MCG',
+            url: 'https://uunimed.github.io/mcg/',
+            description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
+            icon: 'users',
+            colorClass: 'mcg-bg'
         }
+    ];
+    
+    // Combine defaults with any custom websites
+    websites = [...defaultWebsites, ...customWebsites];
+    
+    // Update nextWebsiteId to avoid conflicts
+    const maxId = Math.max(...websites.map(w => w.id), 5);
+    nextWebsiteId = maxId + 1;
+    
+    saveWebsites();
+    
+    // Don't show popup during page load - it interferes with login
+    // The popup will show when the user logs in if needed
+}
         
-        // Enter key for login
-        passwordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginBtn.click();
-            }
-        });
+// Functions to show/hide content
+function showProtectedContent() {
+    authForm.style.display = 'none';
+    userInfo.style.display = 'flex';
+    loginMessage.style.display = 'none';
+    protectedContent.style.display = 'block';
+    
+    // Check if we need to show restoration message
+    const defaultWebsiteNames = ['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'];
+    const hasAllDefaults = defaultWebsiteNames.every(name => 
+        websites.some(website => website.name === name)
+    );
+    
+    if (!hasAllDefaults) {
+        // Force restore if still missing
+        restoreDefaultWebsites();
+        showPopup('ნაგულისხმევი ვებსაიტები აღდგენილია', true);
+    }
+    
+    renderWebsites();
+    
+    // Animate cards
+    const cards = document.querySelectorAll('.website-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
         
-        // Functions to show/hide content
-        function showProtectedContent() {
-            authForm.style.display = 'none';
-            userInfo.style.display = 'flex';
-            loginMessage.style.display = 'none';
-            protectedContent.style.display = 'block';
-            
-            renderWebsites();
-            
-            const cards = document.querySelectorAll('.website-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 150);
-            });
-        }
+        setTimeout(() => {
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 150);
+    });
+}
         
         function showLoginForm() {
             authForm.style.display = 'flex';
