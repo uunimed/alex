@@ -808,10 +808,10 @@
         <div class="confirmation-content">
             <div class="confirmation-icon" id="confirmationIcon"></div>
             <h3 class="confirmation-title" id="confirmationTitle">დადასტურება</h3>
-            <p class="confirmation-message" id="confirmationMessage">დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?</p>
+            <p class="confirmation-message" id="confirmationMessage">დარწმუნებული ხართ, რომ გსურთ ამ გვერდის წაშლა?</p>
             <div class="confirmation-actions">
                 <button class="btn-cancel" id="cancelConfirmBtn">გაუქმება</button>
-                <button class="btn-confirm" id="confirmBtn">დადასტურება</button>
+                <button class="btn-confirm" id="confirmBtn">წაშლა</button>
             </div>
         </div>
     </div>
@@ -820,7 +820,7 @@
     <div class="modal-overlay" id="websiteModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">ახალი ვებსაიტის დამატება</h2>
+                <h2 id="modalTitle">ახალი გვერდის დამატება</h2>
             </div>
             
             <div class="modal-tabs">
@@ -832,19 +832,19 @@
             <div class="tab-content active" id="add-tab">
                 <form id="addWebsiteForm">
                     <div class="form-group">
-                        <label class="form-label" for="websiteName">ვებსაიტის სახელი</label>
-                        <input type="text" id="websiteName" class="form-input" required placeholder="მაგ: ჩემი ვებსაიტი">
+                        <label class="form-label" for="websiteName">ვებგერდის სახელი</label>
+                        <input type="text" id="websiteName" class="form-input" required placeholder="შეიტანეთი">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="websiteUrl">ვებსაიტის ბმული (URL)</label>
+                        <label class="form-label" for="websiteUrl">ვებგვერდის ბმული</label>
                         <input type="url" id="websiteUrl" class="form-input" required placeholder="https://example.com">
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="websiteDescription">აღწერა</label>
-                        <textarea id="websiteDescription" class="form-input" rows="3" required placeholder="ვებსაიტის მოკლე აღწერა"></textarea>
+                        <textarea id="websiteDescription" class="form-input" rows="3" required placeholder="შეიტანეთ"></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">აირჩიეთ ხატულა</label>
+                        <label class="form-label">ხატულა</label>
                         <div class="icon-selection" id="iconSelection">
                             <!-- Icons will be dynamically added here -->
                         </div>
@@ -871,15 +871,15 @@
     <div class="container">
         <header>
             <div class="header-left">
-                <h1>ვებსაიტების ჰაბი</h1>
-                <p class="subtitle">ყველა ვებ პროექტი ერთ სივრცეში</p>
+                <h1>საერთო ჰაბი</h1>
+                <p class="subtitle">ყველა ვებგვერდი ერთ სივრცეში</p>
             </div>
             
             <div class="auth-container">
                 <div class="user-info" id="userInfo">
                     <span class="user-name">ალექსი შოგირაძე</span>
                     <button class="add-website-btn" id="addWebsiteBtn">
-                        <i class="fas fa-plus"></i> ვებსაიტის დამატება
+                        <i class="fas fa-plus"></i>ვებგვერდის დამატება
                     </button>
                     <button class="logout-btn" id="logoutBtn">გასვლა</button>
                 </div>
@@ -900,7 +900,7 @@
             </div>
             
             <h2 class="login-title">გთხოვთ შეხვიდეთ სისტემაში</h2>
-            <p style="color: #666; margin-bottom: 30px; position: relative; z-index: 2;">ვებსაიტების სანახავად საჭიროა ავტორიზაცია</p>
+            <p style="color: #666; margin-bottom: 30px; position: relative; z-index: 2;">სანახავად საჭიროა ავტორიზაცია</p>
         </div>
         
         <div class="protected-content" id="protectedContent">
@@ -1137,7 +1137,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show confirmation modal
         function showConfirmation(websiteName, onConfirm) {
-            confirmationMessage.textContent = `დარწმუნებული ხართ, რომ გსურთ ვებსაიტის "${websiteName}" წაშლა?`;
+            confirmationMessage.textContent = `დარწმუნებული ხართ, რომ გსურთ გვერდის - "${websiteName}" წაშლა?`;
             confirmationIcon.style.backgroundImage = `url("${deleteIconSVG}")`;
             confirmationModal.style.display = 'flex';
             
@@ -1186,7 +1186,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add website button click
         addWebsiteBtn.addEventListener('click', function() {
-            modalTitle.textContent = 'ახალი ვებსაიტის დამატება';
+            modalTitle.textContent = 'ახალი გვერდი დამატება';
             switchTab('add-tab');
             websiteModal.style.display = 'flex';
         });
@@ -1215,10 +1215,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             if (tabId === 'delete-tab') {
-                modalTitle.textContent = 'ვებსაიტის წაშლა';
+                modalTitle.textContent = 'გვერდი წაშლა';
                 renderDeleteWebsiteList();
             } else {
-                modalTitle.textContent = 'ახალი ვებსაიტის დამატება';
+                modalTitle.textContent = 'ახალი გვერდი დამატება';
             }
         }
         
@@ -1273,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', function() {
             websiteModal.style.display = 'none';
             addWebsiteForm.reset();
             
-            showPopup('ვებსაიტი წარმატებით დაემატა', true);
+            showPopup('გვერდი წარმატებით დაემატა', true);
         });
         
         // Delete website
@@ -1282,7 +1282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             saveWebsites();
             renderWebsites();
             renderDeleteWebsiteList();
-            showPopup('ვებსაიტი წარმატებით წაიშალა');
+            showPopup('გვერდი წარმატებით წაიშალა');
         }
         
         // Render delete website list
