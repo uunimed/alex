@@ -1,1 +1,1352 @@
-
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ვებსაიტების ჰაბი</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: calc(100% - 4cm);
+            margin: 0 2cm;
+            max-width: none;
+            background-color: rgba(255, 255, 255, 0.97);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            min-height: 85vh;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-left h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .auth-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .user-name {
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            padding: 8px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .add-website-btn {
+            padding: 8px 20px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .add-website-btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+        }
+        
+        .auth-form {
+            display: flex;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 20px;
+            border-radius: 10px;
+            gap: 15px;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .auth-input {
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            width: 160px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.95rem;
+        }
+        
+        .auth-input::placeholder {
+            color: #666;
+        }
+        
+        .auth-btn {
+            padding: 10px 25px;
+            background: white;
+            color: #1e3c72;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .auth-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .websites-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+            padding: 40px;
+        }
+        
+        .website-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+        
+        .website-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .delete-website-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .website-card:hover .delete-website-btn {
+            opacity: 1;
+        }
+        
+        .delete-website-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .card-header {
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .card-content {
+            padding: 25px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+        
+        .card-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #1e3c72;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        
+        .btn:hover {
+            background: #2a5298;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(30, 60, 114, 0.2);
+        }
+        
+        .protected-content {
+            display: none;
+        }
+        
+        .login-message {
+            text-align: center;
+            padding: 80px 40px;
+            font-size: 1.2rem;
+            color: #666;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Popup Notification */
+        .popup-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .popup-success {
+            background: #27ae60;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .popup-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        
+        /* Add Website Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+        
+        .modal-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .modal-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .modal-tab.active {
+            color: #1e3c72;
+        }
+        
+        .modal-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #1e3c72;
+        }
+        
+        .modal-tab:hover {
+            color: #1e3c72;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #1e3c72;
+            outline: none;
+        }
+        
+        .icon-selection {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+        }
+        
+        .icon-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            padding: 5px;
+        }
+        
+        .icon-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .icon-option.selected {
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 2px rgba(30, 60, 114, 0.3);
+        }
+        
+        .delete-website-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        
+        .delete-website-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
+        }
+        
+        .delete-website-item:hover {
+            background: #f9f9f9;
+        }
+        
+        .delete-website-item:last-child {
+            border-bottom: none;
+        }
+        
+        .website-item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .website-item-icon {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .website-item-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .website-item-url {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .delete-item-btn {
+            padding: 6px 12px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .delete-item-btn:hover {
+            background: #c0392b;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-secondary {
+            padding: 10px 20px;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        
+        .btn-primary {
+            padding: 10px 20px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #2a5298;
+        }
+        
+        /* Vector Icons */
+        .vector-icon {
+            width: 70px;
+            height: 70px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* Login Animation */
+        .login-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .floating-element {
+            position: absolute;
+            background: rgba(30, 60, 114, 0.1);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+        
+        .login-title {
+            position: relative;
+            z-index: 2;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #1e3c72;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+        
+        .login-icon {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .websites-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .icon-selection {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                width: calc(100% - 1cm);
+                margin: 0 0.5cm;
+            }
+            
+            .websites-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .header-left, .auth-container {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .auth-form {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .auth-input {
+                width: 100%;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+            }
+            
+            .icon-selection {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .websites-grid {
+                grid-template-columns: 1fr;
+                padding: 25px 20px;
+            }
+            
+            .header-left h1 {
+                font-size: 1.6rem;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            .popup-notification {
+                left: 20px;
+                right: 20px;
+                top: 10px;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                width: calc(100% - 20px);
+                margin: 0 10px;
+                border-radius: 10px;
+            }
+            
+            .icon-selection {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Popup Notification -->
+    <div class="popup-notification" id="popupNotification">
+        <div class="popup-content">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="popupMessage">არასწორი მომხმარებელი ან პაროლი</span>
+            <button class="popup-close" id="popupClose">&times;</button>
+        </div>
+    </div>
+    
+    <!-- Add/Delete Website Modal -->
+    <div class="modal-overlay" id="websiteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">ახალი ვებსაიტის დამატება</h2>
+            </div>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="add-tab">დამატება</button>
+                <button class="modal-tab" data-tab="delete-tab">წაშლა</button>
+            </div>
+            
+            <!-- Add Website Tab -->
+            <div class="tab-content active" id="add-tab">
+                <form id="addWebsiteForm">
+                    <div class="form-group">
+                        <label class="form-label" for="websiteName">ვებსაიტის სახელი</label>
+                        <input type="text" id="websiteName" class="form-input" required placeholder="მაგ: ჩემი ვებსაიტი">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="websiteUrl">ვებსაიტის ბმული (URL)</label>
+                        <input type="url" id="websiteUrl" class="form-input" required placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="websiteDescription">აღწერა</label>
+                        <textarea id="websiteDescription" class="form-input" rows="3" required placeholder="ვებსაიტის მოკლე აღწერა"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">აირჩიეთ ხატულა</label>
+                        <div class="icon-selection" id="iconSelection">
+                            <!-- Icons will be dynamically added here -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="cancelBtn">გაუქმება</button>
+                        <button type="submit" class="btn-primary">დამატება</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Delete Website Tab -->
+            <div class="tab-content" id="delete-tab">
+                <div class="delete-website-list" id="deleteWebsiteList">
+                    <!-- Websites for deletion will be dynamically added here -->
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelDeleteBtn">გაუქმება</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>ვებსაიტების ჰაბი</h1>
+                <p class="subtitle">ყველა ვებ პროექტი ერთ სივრცეში</p>
+            </div>
+            
+            <div class="auth-container">
+                <div class="user-info" id="userInfo">
+                    <span class="user-name">ალექსი შოგირაძე</span>
+                    <button class="add-website-btn" id="addWebsiteBtn">
+                        <i class="fas fa-plus"></i> ვებსაიტის დამატება
+                    </button>
+                    <button class="logout-btn" id="logoutBtn">გასვლა</button>
+                </div>
+                
+                <div class="auth-form" id="authForm">
+                    <input type="text" id="username" class="auth-input" placeholder="მომხმარებელი">
+                    <input type="password" id="password" class="auth-input" placeholder="პაროლი">
+                    <button class="auth-btn" id="loginBtn">შესვლა</button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="login-message" id="loginMessage">
+            <div class="login-animation" id="loginAnimation"></div>
+            
+            <div class="login-icon">
+                <i class="fas fa-lock fa-4x" style="color: #1e3c72;"></i>
+            </div>
+            
+            <h2 class="login-title">გთხოვთ შეხვიდეთ სისტემაში</h2>
+            <p style="color: #666; margin-bottom: 30px; position: relative; z-index: 2;">ვებსაიტების სანახავად საჭიროა ავტორიზაცია</p>
+        </div>
+        
+        <div class="protected-content" id="protectedContent">
+            <div class="websites-grid" id="websitesGrid">
+                <!-- Websites will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // DOM Elements
+        const authForm = document.getElementById('authForm');
+        const userInfo = document.getElementById('userInfo');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const addWebsiteBtn = document.getElementById('addWebsiteBtn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginMessage = document.getElementById('loginMessage');
+        const protectedContent = document.getElementById('protectedContent');
+        const popupNotification = document.getElementById('popupNotification');
+        const popupMessage = document.getElementById('popupMessage');
+        const popupClose = document.getElementById('popupClose');
+        const websiteModal = document.getElementById('websiteModal');
+        const addWebsiteForm = document.getElementById('addWebsiteForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const websitesGrid = document.getElementById('websitesGrid');
+        const iconSelection = document.getElementById('iconSelection');
+        const deleteWebsiteList = document.getElementById('deleteWebsiteList');
+        const modalTabs = document.querySelectorAll('.modal-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const modalTitle = document.getElementById('modalTitle');
+        
+        // Correct credentials
+        const correctUsername = 'alex';
+        const correctPassword = '2911';
+        const userName = 'ალექსი შოგირაძე';
+        
+        // Vector icons database - 30 different vector icons
+        const vectorIcons = [
+            { id: 'money', name: 'ფული', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z'/%3E%3C/svg%3E" },
+            { id: 'exam', name: 'გამოცდა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z'/%3E%3C/svg%3E" },
+            { id: 'calendar', name: 'კალენდარი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM12 10c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm.5 8.5H11V15h1.5v3.5zm0-4.5H11V10h1.5v4z'/%3E%3C/svg%3E" },
+            { id: 'language', name: 'ენა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z'/%3E%3C/svg%3E" },
+            { id: 'users', name: 'მომხმარებლები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E" },
+            { id: 'home', name: 'მთავარი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E" },
+            { id: 'settings', name: 'პარამეტრები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z'/%3E%3C/svg%3E" },
+            { id: 'book', name: 'წიგნი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z'/%3E%3C/svg%3E" },
+            { id: 'chart', name: 'გრაფიკი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z'/%3E%3C/svg%3E" },
+            { id: 'mail', name: 'ფოსტა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z'/%3E%3C/svg%3E" },
+            { id: 'bell', name: 'შეტყობინება', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z'/%3E%3C/svg%3E" },
+            { id: 'star', name: 'ვარსკვლავი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E" },
+            { id: 'heart', name: 'გული', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E" },
+            { id: 'cloud', name: 'ღრუბელი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z'/%3E%3C/svg%3E" },
+            { id: 'camera', name: 'კამერა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1h-7.49l.29.5 4.76 8.25C21 16.97 22 14.61 22 12c0-.69-.07-1.35-.2-2zM8.54 12l-3.9-6.75C3.01 7.03 2 9.39 2 12c0 .69.07 1.35.2 2h7.49l-1.15-2zm-6.08 3c.92 2.92 3.15 5.26 6 6.34L12.12 15H2.46zm11.27 0l-3.9 6.76c.75.15 1.54.24 2.34.24 2.4 0 4.6-.85 6.32-2.25l-3.66-6.35-.1.1z'/%3E%3C/svg%3E" },
+            { id: 'music', name: 'მუსიკა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z'/%3E%3C/svg%3E" },
+            { id: 'video', name: 'ვიდეო', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z'/%3E%3C/svg%3E" },
+            { id: 'phone', name: 'ტელეფონი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M6.54 5c.06.89.21 1.76.45 2.59l-1.2 1.2c-.41-1.2-.67-2.47-.76-3.79h1.51m9.86 12.02c.85.24 1.72.39 2.6.45v1.49c-1.32-.09-2.59-.35-3.8-.75l1.2-1.19M7.5 3H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.49c0-.55-.45-1-1-1-1.24 0-2.45-.2-3.57-.57-.1-.04-.21-.05-.31-.05-.26 0-.51.1-.71.29l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1z'/%3E%3C/svg%3E" },
+            { id: 'map', name: 'რუკა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z'/%3E%3C/svg%3E" },
+            { id: 'shopping', name: 'შოპინგი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z'/%3E%3C/svg%3E" },
+            { id: 'game', name: 'თამაში', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M15 7.5V2H9v5.5l3 3 3-3zM7.5 9H2v6h5.5l3-3-3-3zM9 16.5V22h6v-5.5l-3-3-3 3zM16.5 9l-3 3 3 3H22V9h-5.5z'/%3E%3C/svg%3E" },
+            { id: 'code', name: 'კოდი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z'/%3E%3C/svg%3E" },
+            { id: 'database', name: 'ბაზა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 4C8.1 4 5 4.9 5 6s3.1 2 7 2 7-.9 7-2-3.1-2-7-2zM5 8v4c0 1.1 3.1 2 7 2s7-.9 7-2V8c0 1.1-3.1 2-7 2s-7-.9-7-2zm0 6v4c0 1.1 3.1 2 7 2s7-.9 7-2v-4c0 1.1-3.1 2-7 2s-7-.9-7-2z'/%3E%3C/svg%3E" },
+            { id: 'shield', name: 'ფარი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/%3E%3C/svg%3E" },
+            { id: 'wifi', name: 'ვაიფაი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z'/%3E%3C/svg%3E" },
+            { id: 'battery', name: 'ბატარეა', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z'/%3E%3C/svg%3E" },
+            { id: 'calculator', name: 'კალკულატორი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-4h2v4zm0-6h-2V7h2v2z'/%3E%3C/svg%3E" },
+            { id: 'key', name: 'გასაღები', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M21 10h-8.35C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H13l2 2 2-2 2 2 4-4.04L21 10zM7 15c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z'/%3E%3C/svg%3E" },
+            { id: 'printer', name: 'პრინტერი', svg: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z'/%3E%3C/svg%3E" }
+        ];
+        
+        // Color classes for icons
+        const colorClasses = [
+            'vali-bg', 'rezidentura-bg', 'shift-bg', 'deutsch-bg', 'mcg-bg'
+        ];
+        
+        // Initialize website data
+        let websites = [
+            {
+                id: 1,
+                name: 'ვალი',
+                url: 'https://uunimed.github.io/vali/',
+                description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
+                icon: 'money',
+                colorClass: 'vali-bg'
+            },
+            {
+                id: 2,
+                name: 'რეზიდენტურა',
+                url: 'https://uunimed.github.io/rezidentura/',
+                description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
+                icon: 'exam',
+                colorClass: 'rezidentura-bg'
+            },
+            {
+                id: 3,
+                name: 'ცვლა',
+                url: 'https://uunimed.github.io/shift/',
+                description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
+                icon: 'calendar',
+                colorClass: 'shift-bg'
+            },
+            {
+                id: 4,
+                name: 'გერმანული',
+                url: 'https://uunimed.github.io/deutsch/',
+                description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
+                icon: 'language',
+                colorClass: 'deutsch-bg'
+            },
+            {
+                id: 5,
+                name: 'MCG',
+                url: 'https://uunimed.github.io/mcg/',
+                description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
+                icon: 'users',
+                colorClass: 'mcg-bg'
+            }
+        ];
+        
+        let nextWebsiteId = 6;
+        let selectedIcon = 'money';
+        let selectedColorClass = 'vali-bg';
+        
+        // Create floating animation elements
+        function createLoginAnimation() {
+            const animationContainer = document.getElementById('loginAnimation');
+            animationContainer.innerHTML = '';
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                
+                // Random properties
+                const size = Math.random() * 30 + 10;
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 4;
+                
+                // Apply properties
+                element.style.width = `${size}px`;
+                element.style.height = `${size}px`;
+                element.style.left = `${left}%`;
+                element.style.top = `${top}%`;
+                element.style.animationDelay = `${delay}s`;
+                element.style.animationDuration = `${duration}s`;
+                
+                // Random color
+                const colors = [
+                    'rgba(30, 60, 114, 0.1)',
+                    'rgba(42, 82, 152, 0.08)',
+                    'rgba(39, 174, 96, 0.05)',
+                    'rgba(52, 152, 219, 0.07)'
+                ];
+                element.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                animationContainer.appendChild(element);
+            }
+        }
+        
+        // Render icon selection options
+        function renderIconSelection() {
+            iconSelection.innerHTML = '';
+            
+            vectorIcons.forEach((icon, index) => {
+                const iconOption = document.createElement('div');
+                iconOption.className = `icon-option ${colorClasses[index % colorClasses.length]}`;
+                if (icon.id === selectedIcon) {
+                    iconOption.classList.add('selected');
+                }
+                iconOption.setAttribute('data-icon', icon.id);
+                iconOption.setAttribute('data-color', colorClasses[index % colorClasses.length]);
+                iconOption.setAttribute('title', icon.name);
+                
+                const iconSvg = document.createElement('div');
+                iconSvg.className = 'vector-icon';
+                iconSvg.style.backgroundImage = `url("${icon.svg}")`;
+                iconSvg.style.width = '30px';
+                iconSvg.style.height = '30px';
+                
+                iconOption.appendChild(iconSvg);
+                iconSelection.appendChild(iconOption);
+                
+                iconOption.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    selectedIcon = this.getAttribute('data-icon');
+                    selectedColorClass = this.getAttribute('data-color');
+                });
+            });
+        }
+        
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                showProtectedContent();
+            } else {
+                showLoginForm();
+            }
+            
+            // Create login animation
+            createLoginAnimation();
+            
+            // Load saved websites
+            loadSavedWebsites();
+            
+            // Render icon selection
+            renderIconSelection();
+        });
+        
+        // Show popup notification
+        function showPopup(message, isSuccess = false) {
+            popupMessage.textContent = message;
+            popupNotification.className = 'popup-notification';
+            if (isSuccess) {
+                popupNotification.classList.add('popup-success');
+            }
+            popupNotification.style.display = 'block';
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                popupNotification.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Close popup notification
+        popupClose.addEventListener('click', function() {
+            popupNotification.style.display = 'none';
+        });
+        
+        // Login functionality
+        loginBtn.addEventListener('click', function() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!username || !password) {
+                showPopup('გთხოვთ შეავსოთ ორივე ველი');
+                return;
+            }
+            
+            if (username === correctUsername && password === correctPassword) {
+                // Save login state
+                localStorage.setItem('isLoggedIn', 'true');
+                
+                // Show protected content
+                showProtectedContent();
+            } else {
+                // Show error popup
+                showPopup('არასწორი მომხმარებელი ან პაროლი');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                usernameInput.focus();
+            }
+        });
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('isLoggedIn');
+            showLoginForm();
+            showPopup('თქვენ გამოხვედით სისტემიდან');
+        });
+        
+        // Add website button click
+        addWebsiteBtn.addEventListener('click', function() {
+            modalTitle.textContent = 'ახალი ვებსაიტის დამატება';
+            switchTab('add-tab');
+            websiteModal.style.display = 'flex';
+        });
+        
+        // Modal tab switching
+        modalTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+        
+        function switchTab(tabId) {
+            // Update active tab
+            modalTabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Update active content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                }
+            });
+            
+            // Update modal title
+            if (tabId === 'delete-tab') {
+                modalTitle.textContent = 'ვებსაიტის წაშლა';
+                renderDeleteWebsiteList();
+            } else {
+                modalTitle.textContent = 'ახალი ვებსაიტის დამატება';
+            }
+        }
+        
+        // Close modal
+        cancelBtn.addEventListener('click', function() {
+            websiteModal.style.display = 'none';
+            addWebsiteForm.reset();
+        });
+        
+        cancelDeleteBtn.addEventListener('click', function() {
+            websiteModal.style.display = 'none';
+        });
+        
+        // Add website form submission
+        addWebsiteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('websiteName').value;
+            const url = document.getElementById('websiteUrl').value;
+            const description = document.getElementById('websiteDescription').value;
+            
+            if (!name || !url || !description) {
+                showPopup('გთხოვთ შეავსოთ ყველა ველი');
+                return;
+            }
+            
+            // Validate URL
+            try {
+                new URL(url);
+            } catch {
+                showPopup('გთხოვთ შეიყვანოთ სწორი URL მისამართი');
+                return;
+            }
+            
+            // Add new website
+            const newWebsite = {
+                id: nextWebsiteId++,
+                name: name,
+                url: url,
+                description: description,
+                icon: selectedIcon,
+                colorClass: selectedColorClass
+            };
+            
+            websites.push(newWebsite);
+            saveWebsites();
+            renderWebsites();
+            
+            // Close modal and reset form
+            websiteModal.style.display = 'none';
+            addWebsiteForm.reset();
+            
+            showPopup('ვებსაიტი წარმატებით დაემატა', true);
+        });
+        
+        // Delete website
+        function deleteWebsite(id) {
+            websites = websites.filter(website => website.id !== id);
+            saveWebsites();
+            renderWebsites();
+            renderDeleteWebsiteList();
+            showPopup('ვებსაიტი წარმატებით წაიშალა');
+        }
+        
+        // Render delete website list
+        function renderDeleteWebsiteList() {
+            deleteWebsiteList.innerHTML = '';
+            
+            if (websites.length === 0) {
+                deleteWebsiteList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">ვებსაიტები არ მოიძებნა</p>';
+                return;
+            }
+            
+            websites.forEach(website => {
+                const websiteItem = document.createElement('div');
+                websiteItem.className = 'delete-website-item';
+                
+                const iconInfo = vectorIcons.find(icon => icon.id === website.icon);
+                
+                websiteItem.innerHTML = `
+                    <div class="website-item-info">
+                        <div class="vector-icon website-item-icon ${website.colorClass}" style="background-image: url('${iconInfo ? iconInfo.svg : vectorIcons[0].svg}')"></div>
+                        <div>
+                            <div class="website-item-name">${website.name}</div>
+                            <div class="website-item-url">${website.url}</div>
+                        </div>
+                    </div>
+                    <button class="delete-item-btn" data-id="${website.id}">წაშლა</button>
+                `;
+                
+                deleteWebsiteList.appendChild(websiteItem);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-item-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    if (confirm('დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?')) {
+                        deleteWebsite(id);
+                    }
+                });
+            });
+        }
+        
+        // Render websites to the grid
+        function renderWebsites() {
+            websitesGrid.innerHTML = '';
+            
+            websites.forEach(website => {
+                const card = document.createElement('div');
+                card.className = 'website-card';
+                card.setAttribute('data-id', website.id);
+                
+                // Find icon SVG
+                const iconInfo = vectorIcons.find(icon => icon.id === website.icon);
+                const iconSvg = iconInfo ? iconInfo.svg : vectorIcons[0].svg;
+                
+                card.innerHTML = `
+                    <button class="delete-website-btn" data-id="${website.id}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="card-header ${website.colorClass}">
+                        <div class="vector-icon" style="background-image: url('${iconSvg}')"></div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${website.name}</h3>
+                        <p class="card-desc">${website.description}</p>
+                        <a href="${website.url}" class="btn">ვებსაიტზე გადასვლა</a>
+                    </div>
+                `;
+                
+                websitesGrid.appendChild(card);
+            });
+            
+            // Update website links to open in same window
+            const websiteLinks = document.querySelectorAll('.website-card .btn');
+            websiteLinks.forEach(link => {
+                link.removeAttribute('target');
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+            
+            // Add event listeners to delete buttons on cards
+            document.querySelectorAll('.delete-website-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = parseInt(this.getAttribute('data-id'));
+                    if (confirm('დარწმუნებული ხართ, რომ გსურთ ამ ვებსაიტის წაშლა?')) {
+                        deleteWebsite(id);
+                    }
+                });
+            });
+        }
+        
+        // Save websites to localStorage
+        function saveWebsites() {
+            localStorage.setItem('websites', JSON.stringify(websites));
+            localStorage.setItem('nextWebsiteId', nextWebsiteId.toString());
+        }
+        
+        // Load websites from localStorage
+        function loadSavedWebsites() {
+            const savedWebsites = localStorage.getItem('websites');
+            const savedNextId = localStorage.getItem('nextWebsiteId');
+            
+            if (savedWebsites) {
+                websites = JSON.parse(savedWebsites);
+            }
+            
+            if (savedNextId) {
+                nextWebsiteId = parseInt(savedNextId);
+            }
+        }
+        
+        // Enter key for login
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+        
+        // Functions to show/hide content
+        function showProtectedContent() {
+            authForm.style.display = 'none';
+            userInfo.style.display = 'flex';
+            loginMessage.style.display = 'none';
+            protectedContent.style.display = 'block';
+            
+            // Render websites
+            renderWebsites();
+            
+            // Animate cards
+            const cards = document.querySelectorAll('.website-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        }
+        
+        function showLoginForm() {
+            authForm.style.display = 'flex';
+            userInfo.style.display = 'none';
+            loginMessage.style.display = 'flex';
+            protectedContent.style.display = 'none';
+            
+            // Clear inputs
+            usernameInput.value = '';
+            passwordInput.value = '';
+            usernameInput.focus();
+            
+            // Responsive adjustment
+            if (window.innerWidth <= 900) {
+                authForm.style.flexDirection = 'column';
+                authForm.style.alignItems = 'center';
+                authForm.style.gap = '10px';
+            }
+        }
+        
+        // Responsive adjustment for auth form
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 900) {
+                authForm.style.flexDirection = 'column';
+                authForm.style.alignItems = 'center';
+                authForm.style.gap = '10px';
+            } else {
+                authForm.style.flexDirection = 'row';
+                authForm.style.alignItems = 'center';
+                authForm.style.gap = '15px';
+            }
+        });
+    </script>
+</body>
+</html>
