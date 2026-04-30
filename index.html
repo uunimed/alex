@@ -792,6 +792,32 @@
             }
         }
     </style>
+    
+<!-- Firebase SDKs for Realtime Database -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyA36t5PGnSCvMwW9oUDQmJC1fE8bdGxD1Q",
+    authDomain: "alex-98741.firebaseapp.com",
+    projectId: "alex-98741",
+    storageBucket: "alex-98741.firebasestorage.app",
+    messagingSenderId: "200712870305",
+    appId: "1:200712870305:web:3b1dd25683effbda49d3e0",
+    measurementId: "G-XC0LYY9H22"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  
+  window.db = database;
+  window.ref = ref;
+  window.onValue = onValue;
+  window.push = push;
+  window.remove = remove;
+</script>
+
 </head>
 <body>
     <!-- Popup Notification -->
@@ -911,199 +937,273 @@
     </div>
     
     <script>
-        // DOM Elements
-        const authForm = document.getElementById('authForm');
-        const userInfo = document.getElementById('userInfo');
-        const loginBtn = document.getElementById('loginBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const addWebsiteBtn = document.getElementById('addWebsiteBtn');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginMessage = document.getElementById('loginMessage');
-        const protectedContent = document.getElementById('protectedContent');
-        const popupNotification = document.getElementById('popupNotification');
-        const popupMessage = document.getElementById('popupMessage');
-        const popupClose = document.getElementById('popupClose');
-        const websiteModal = document.getElementById('websiteModal');
-        const addWebsiteForm = document.getElementById('addWebsiteForm');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-        const websitesGrid = document.getElementById('websitesGrid');
-        const iconSelection = document.getElementById('iconSelection');
-        const deleteWebsiteList = document.getElementById('deleteWebsiteList');
-        const modalTabs = document.querySelectorAll('.modal-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const modalTitle = document.getElementById('modalTitle');
-        const confirmationModal = document.getElementById('confirmationModal');
-        const confirmationIcon = document.getElementById('confirmationIcon');
-        const confirmationTitle = document.getElementById('confirmationTitle');
-        const confirmationMessage = document.getElementById('confirmationMessage');
-        const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
-        const confirmBtn = document.getElementById('confirmBtn');
+// DOM Elements
+const authForm = document.getElementById('authForm');
+const userInfo = document.getElementById('userInfo');
+const loginBtn = document.getElementById('loginBtn');
+const logoutBtn = document.getElementById('logoutBtn');
+const addWebsiteBtn = document.getElementById('addWebsiteBtn');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginMessage = document.getElementById('loginMessage');
+const protectedContent = document.getElementById('protectedContent');
+const popupNotification = document.getElementById('popupNotification');
+const popupMessage = document.getElementById('popupMessage');
+const popupClose = document.getElementById('popupClose');
+const websiteModal = document.getElementById('websiteModal');
+const addWebsiteForm = document.getElementById('addWebsiteForm');
+const cancelBtn = document.getElementById('cancelBtn');
+const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+const websitesGrid = document.getElementById('websitesGrid');
+const iconSelection = document.getElementById('iconSelection');
+const deleteWebsiteList = document.getElementById('deleteWebsiteList');
+const modalTabs = document.querySelectorAll('.modal-tab');
+const tabContents = document.querySelectorAll('.tab-content');
+const modalTitle = document.getElementById('modalTitle');
+const confirmationModal = document.getElementById('confirmationModal');
+const confirmationIcon = document.getElementById('confirmationIcon');
+const confirmationTitle = document.getElementById('confirmationTitle');
+const confirmationMessage = document.getElementById('confirmationMessage');
+const cancelConfirmBtn = document.getElementById('cancelConfirmBtn');
+const confirmBtn = document.getElementById('confirmBtn');
+
+// Correct credentials
+const correctUsername = 'alex';
+const correctPassword = '2911';
+const userName = 'ალექსი შოგირაძე';
+
+// SIMPLE VECTOR ICONS
+const vectorIcons = [
+    { id: 'money', name: 'ფული', iconClass: 'fas fa-money-bill-wave' },
+    { id: 'exam', name: 'გამოცდა', iconClass: 'fas fa-file-alt' },
+    { id: 'calendar', name: 'კალენდარი', iconClass: 'fas fa-calendar-alt' },
+    { id: 'language', name: 'ენა', iconClass: 'fas fa-language' },
+    { id: 'users', name: 'მომხმარებლები', iconClass: 'fas fa-users' },
+    { id: 'home', name: 'მთავარი', iconClass: 'fas fa-home' },
+    { id: 'settings', name: 'პარამეტრები', iconClass: 'fas fa-cog' },
+    { id: 'book', name: 'წიგნი', iconClass: 'fas fa-book' },
+    { id: 'chart', name: 'გრაფიკი', iconClass: 'fas fa-chart-bar' },
+    { id: 'mail', name: 'ფოსტა', iconClass: 'fas fa-envelope' },
+    { id: 'bell', name: 'შეტყობინება', iconClass: 'fas fa-bell' },
+    { id: 'star', name: 'ვარსკვლავი', iconClass: 'fas fa-star' },
+    { id: 'heart', name: 'გული', iconClass: 'fas fa-heart' },
+    { id: 'cloud', name: 'ღრუბელი', iconClass: 'fas fa-cloud' },
+    { id: 'camera', name: 'კამერა', iconClass: 'fas fa-camera' },
+    { id: 'music', name: 'მუსიკა', iconClass: 'fas fa-music' },
+    { id: 'video', name: 'ვიდეო', iconClass: 'fas fa-video' },
+    { id: 'phone', name: 'ტელეფონი', iconClass: 'fas fa-phone' },
+    { id: 'map', name: 'რუკა', iconClass: 'fas fa-map' },
+    { id: 'shopping', name: 'შოპინგი', iconClass: 'fas fa-shopping-cart' },
+    { id: 'game', name: 'თამაში', iconClass: 'fas fa-gamepad' },
+    { id: 'code', name: 'კოდი', iconClass: 'fas fa-code' },
+    { id: 'database', name: 'ბაზა', iconClass: 'fas fa-database' },
+    { id: 'shield', name: 'ფარი', iconClass: 'fas fa-shield-alt' },
+    { id: 'wifi', name: 'ვაიფაი', iconClass: 'fas fa-wifi' }
+];
+
+// Color classes for icons
+const colorClasses = [
+    'vali-bg', 'rezidentura-bg', 'shift-bg', 'deutsch-bg', 'mcg-bg',
+    'custom1-bg', 'custom2-bg', 'custom3-bg', 'custom4-bg', 'custom5-bg'
+];
+
+let websites = [];
+let selectedIcon = 'money';
+let selectedColorClass = 'vali-bg';
+let websiteToDelete = null;
+
+// Simple delete confirmation icon
+const deleteIconSVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Cpath d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'/%3E%3C/svg%3E";
+
+// Realtime Database reference
+const DB_PATH = 'websites';
+
+// Initialize Firebase and load data
+function initFirebase() {
+    if (typeof window.onValue === 'undefined') {
+        console.log('Waiting for Firebase...');
+        setTimeout(initFirebase, 100);
+        return;
+    }
+    
+    console.log('Firebase ready, loading websites from Realtime Database...');
+    loadWebsitesFromDatabase();
+}
+
+// Load websites from Realtime Database with real-time listener
+function loadWebsitesFromDatabase() {
+    const websitesRef = window.ref(window.db, DB_PATH);
+    
+    window.onValue(websitesRef, (snapshot) => {
+        const data = snapshot.val();
+        websites = [];
         
-        // Correct credentials
-        const correctUsername = 'alex';
-        const correctPassword = '2911';
-        const userName = 'ალექსი შოგირაძე';
-        
-        // SIMPLE VECTOR ICONS - Using Font Awesome classes instead of SVG
-        const vectorIcons = [
-            { id: 'money', name: 'ფული', iconClass: 'fas fa-money-bill-wave' },
-            { id: 'exam', name: 'გამოცდა', iconClass: 'fas fa-file-alt' },
-            { id: 'calendar', name: 'კალენდარი', iconClass: 'fas fa-calendar-alt' },
-            { id: 'language', name: 'ენა', iconClass: 'fas fa-language' },
-            { id: 'users', name: 'მომხმარებლები', iconClass: 'fas fa-users' },
-            { id: 'home', name: 'მთავარი', iconClass: 'fas fa-home' },
-            { id: 'settings', name: 'პარამეტრები', iconClass: 'fas fa-cog' },
-            { id: 'book', name: 'წიგნი', iconClass: 'fas fa-book' },
-            { id: 'chart', name: 'გრაფიკი', iconClass: 'fas fa-chart-bar' },
-            { id: 'mail', name: 'ფოსტა', iconClass: 'fas fa-envelope' },
-            { id: 'bell', name: 'შეტყობინება', iconClass: 'fas fa-bell' },
-            { id: 'star', name: 'ვარსკვლავი', iconClass: 'fas fa-star' },
-            { id: 'heart', name: 'გული', iconClass: 'fas fa-heart' },
-            { id: 'cloud', name: 'ღრუბელი', iconClass: 'fas fa-cloud' },
-            { id: 'camera', name: 'კამერა', iconClass: 'fas fa-camera' },
-            { id: 'music', name: 'მუსიკა', iconClass: 'fas fa-music' },
-            { id: 'video', name: 'ვიდეო', iconClass: 'fas fa-video' },
-            { id: 'phone', name: 'ტელეფონი', iconClass: 'fas fa-phone' },
-            { id: 'map', name: 'რუკა', iconClass: 'fas fa-map' },
-            { id: 'shopping', name: 'შოპინგი', iconClass: 'fas fa-shopping-cart' },
-            { id: 'game', name: 'თამაში', iconClass: 'fas fa-gamepad' },
-            { id: 'code', name: 'კოდი', iconClass: 'fas fa-code' },
-            { id: 'database', name: 'ბაზა', iconClass: 'fas fa-database' },
-            { id: 'shield', name: 'ფარი', iconClass: 'fas fa-shield-alt' },
-            { id: 'wifi', name: 'ვაიფაი', iconClass: 'fas fa-wifi' }
-        ];
-        
-        // Simple delete confirmation icon
-        const deleteIconSVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Cpath d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'/%3E%3C/svg%3E";
-        
-        // Color classes for icons
-        const colorClasses = [
-            'vali-bg', 'rezidentura-bg', 'shift-bg', 'deutsch-bg', 'mcg-bg',
-            'custom1-bg', 'custom2-bg', 'custom3-bg', 'custom4-bg', 'custom5-bg'
-        ];
-        
-        // Initialize website data with full URLs for default websites
-        let websites = [
-            {
-                id: 1,
-                name: 'ვალი',
-                url: 'https://uunimed.github.io/vali/',
-                description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
-                icon: 'money',
-                colorClass: 'vali-bg'
-            },
-            {
-                id: 2,
-                name: 'რეზიდენტურა',
-                url: 'https://uunimed.github.io/rezidentura/',
-                description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
-                icon: 'exam',
-                colorClass: 'rezidentura-bg'
-            },
-            {
-                id: 3,
-                name: 'ცვლა',
-                url: 'https://uunimed.github.io/shift/',
-                description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
-                icon: 'calendar',
-                colorClass: 'shift-bg'
-            },
-            {
-                id: 4,
-                name: 'გერმანული',
-                url: 'https://uunimed.github.io/deutsch/',
-                description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
-                icon: 'language',
-                colorClass: 'deutsch-bg'
-            },
-            {
-                id: 5,
-                name: 'MCG',
-                url: 'https://uunimed.github.io/mcg/',
-                description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
-                icon: 'users',
-                colorClass: 'mcg-bg'
-            }
-        ];
-        
-        let nextWebsiteId = 6;
-        let selectedIcon = 'money';
-        let selectedColorClass = 'vali-bg';
-        let websiteToDelete = null;
-        
-        // Create floating animation elements
-        function createLoginAnimation() {
-            const animationContainer = document.getElementById('loginAnimation');
-            animationContainer.innerHTML = '';
-            
-            for (let i = 0; i < 15; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                
-                const size = Math.random() * 30 + 10;
-                const left = Math.random() * 100;
-                const top = Math.random() * 100;
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 3 + 4;
-                
-                element.style.width = `${size}px`;
-                element.style.height = `${size}px`;
-                element.style.left = `${left}%`;
-                element.style.top = `${top}%`;
-                element.style.animationDelay = `${delay}s`;
-                element.style.animationDuration = `${duration}s`;
-                
-                const colors = [
-                    'rgba(30, 60, 114, 0.1)',
-                    'rgba(42, 82, 152, 0.08)',
-                    'rgba(39, 174, 96, 0.05)',
-                    'rgba(52, 152, 219, 0.07)'
-                ];
-                element.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                animationContainer.appendChild(element);
-            }
-        }
-        
-        // Render icon selection options
-        function renderIconSelection() {
-            iconSelection.innerHTML = '';
-            
-            vectorIcons.forEach((icon, index) => {
-                const iconOption = document.createElement('div');
-                iconOption.className = `icon-option ${colorClasses[index % colorClasses.length]}`;
-                if (icon.id === selectedIcon) {
-                    iconOption.classList.add('selected');
-                }
-                iconOption.setAttribute('data-icon', icon.id);
-                iconOption.setAttribute('data-color', colorClasses[index % colorClasses.length]);
-                iconOption.setAttribute('title', icon.name);
-                
-                // Use Font Awesome icon
-                const iconElement = document.createElement('i');
-                iconElement.className = `${icon.iconClass} fa-2x`;
-                iconElement.style.color = 'white';
-                
-                iconOption.appendChild(iconElement);
-                iconSelection.appendChild(iconOption);
-                
-                iconOption.addEventListener('click', function() {
-                    document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedIcon = this.getAttribute('data-icon');
-                    selectedColorClass = this.getAttribute('data-color');
+        if (data) {
+            Object.keys(data).forEach((key) => {
+                websites.push({
+                    id: key,
+                    ...data[key]
                 });
             });
         }
         
+        // If no websites exist, create defaults
+        if (websites.length === 0) {
+            createDefaultWebsites();
+        } else {
+            renderWebsites();
+            if (document.getElementById('delete-tab') && document.getElementById('delete-tab').classList.contains('active')) {
+                renderDeleteWebsiteList();
+            }
+        }
+    }, (error) => {
+        console.error('Error loading websites:', error);
+        showPopup('მონაცემების ჩატვირთვის შეცდომა', false);
+    });
+}
+
+// Create default websites in Realtime Database
+async function createDefaultWebsites() {
+    const defaultWebsites = [
+        {
+            name: 'ვალი',
+            url: 'https://uunimed.github.io/vali/',
+            description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
+            icon: 'money',
+            colorClass: 'vali-bg'
+        },
+        {
+            name: 'რეზიდენტურა',
+            url: 'https://uunimed.github.io/rezidentura/',
+            description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
+            icon: 'exam',
+            colorClass: 'rezidentura-bg'
+        },
+        {
+            name: 'ცვლა',
+            url: 'https://uunimed.github.io/shift/',
+            description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
+            icon: 'calendar',
+            colorClass: 'shift-bg'
+        },
+        {
+            name: 'გერმანული',
+            url: 'https://uunimed.github.io/deutsch/',
+            description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
+            icon: 'language',
+            colorClass: 'deutsch-bg'
+        },
+        {
+            name: 'MCG',
+            url: 'https://uunimed.github.io/mcg/',
+            description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
+            icon: 'users',
+            colorClass: 'mcg-bg'
+        }
+    ];
+    
+    const websitesRef = window.ref(window.db, DB_PATH);
+    
+    for (const website of defaultWebsites) {
+        const newWebsiteRef = window.push(websitesRef);
+        await window.push(websitesRef, website);
+    }
+    
+    console.log('Default websites created in Realtime Database');
+}
+
+// Add website to Realtime Database
+async function addWebsiteToDatabase(websiteData) {
+    try {
+        const websitesRef = window.ref(window.db, DB_PATH);
+        await window.push(websitesRef, websiteData);
+        showPopup('გვერდი წარმატებით დაემატა', true);
+        return true;
+    } catch (error) {
+        console.error('Error adding website:', error);
+        showPopup('შეცდომა გვერდის დამატებისას', false);
+        return false;
+    }
+}
+
+// Delete website from Realtime Database
+async function deleteWebsiteFromDatabase(websiteId) {
+    try {
+        const websiteRef = window.ref(window.db, `${DB_PATH}/${websiteId}`);
+        await window.remove(websiteRef);
+        showPopup('გვერდი წარმატებით წაიშალა', true);
+        return true;
+    } catch (error) {
+        console.error('Error deleting website:', error);
+        showPopup('შეცდომა გვერდის წაშლისას', false);
+        return false;
+    }
+}
+
+function createLoginAnimation() {
+    const animationContainer = document.getElementById('loginAnimation');
+    animationContainer.innerHTML = '';
+    
+    for (let i = 0; i < 15; i++) {
+        const element = document.createElement('div');
+        element.classList.add('floating-element');
+        
+        const size = Math.random() * 30 + 10;
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 3 + 4;
+        
+        element.style.width = `${size}px`;
+        element.style.height = `${size}px`;
+        element.style.left = `${left}%`;
+        element.style.top = `${top}%`;
+        element.style.animationDelay = `${delay}s`;
+        element.style.animationDuration = `${duration}s`;
+        
+        const colors = [
+            'rgba(30, 60, 114, 0.1)',
+            'rgba(42, 82, 152, 0.08)',
+            'rgba(39, 174, 96, 0.05)',
+            'rgba(52, 152, 219, 0.07)'
+        ];
+        element.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        animationContainer.appendChild(element);
+    }
+}
+
+function renderIconSelection() {
+    iconSelection.innerHTML = '';
+    
+    vectorIcons.forEach((icon, index) => {
+        const iconOption = document.createElement('div');
+        iconOption.className = `icon-option ${colorClasses[index % colorClasses.length]}`;
+        if (icon.id === selectedIcon) {
+            iconOption.classList.add('selected');
+        }
+        iconOption.setAttribute('data-icon', icon.id);
+        iconOption.setAttribute('data-color', colorClasses[index % colorClasses.length]);
+        iconOption.setAttribute('title', icon.name);
+        
+        const iconElement = document.createElement('i');
+        iconElement.className = `${icon.iconClass} fa-2x`;
+        iconElement.style.color = 'white';
+        
+        iconOption.appendChild(iconElement);
+        iconSelection.appendChild(iconOption);
+        
+        iconOption.addEventListener('click', function() {
+            document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedIcon = this.getAttribute('data-icon');
+            selectedColorClass = this.getAttribute('data-color');
+        });
+    });
+}
+
 // Check if user is already logged in
 document.addEventListener('DOMContentLoaded', function() {
-    // FIRST: Load saved websites
-    loadSavedWebsites();
-    
-    // THEN: Check login status
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     
     if (isLoggedIn) {
@@ -1114,253 +1214,249 @@ document.addEventListener('DOMContentLoaded', function() {
     
     createLoginAnimation();
     renderIconSelection();
+    initFirebase();
 });
-        
-        // Show popup notification
-        function showPopup(message, isSuccess = false) {
-            popupMessage.textContent = message;
-            popupNotification.className = 'popup-notification';
-            if (isSuccess) {
-                popupNotification.classList.add('popup-success');
-            }
-            popupNotification.style.display = 'block';
-            
-            setTimeout(() => {
-                popupNotification.style.display = 'none';
-            }, 5000);
+
+function showPopup(message, isSuccess = false) {
+    popupMessage.textContent = message;
+    popupNotification.className = 'popup-notification';
+    if (isSuccess) {
+        popupNotification.classList.add('popup-success');
+    }
+    popupNotification.style.display = 'block';
+    
+    setTimeout(() => {
+        popupNotification.style.display = 'none';
+    }, 5000);
+}
+
+popupClose.addEventListener('click', function() {
+    popupNotification.style.display = 'none';
+});
+
+function showConfirmation(websiteName, onConfirm) {
+    confirmationMessage.textContent = `დარწმუნებული ხართ, რომ გსურთ გვერდის - "${websiteName}" წაშლა?`;
+    confirmationIcon.style.backgroundImage = `url("${deleteIconSVG}")`;
+    confirmationModal.style.display = 'flex';
+    
+    const confirmHandler = function() {
+        onConfirm();
+        confirmationModal.style.display = 'none';
+        confirmBtn.removeEventListener('click', confirmHandler);
+    };
+    
+    confirmBtn.addEventListener('click', confirmHandler);
+}
+
+cancelConfirmBtn.addEventListener('click', function() {
+    confirmationModal.style.display = 'none';
+    websiteToDelete = null;
+});
+
+loginBtn.addEventListener('click', function() {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    
+    if (!username || !password) {
+        showPopup('გთხოვთ შეავსოთ ორივე ველი');
+        return;
+    }
+    
+    if (username === correctUsername && password === correctPassword) {
+        localStorage.setItem('isLoggedIn', 'true');
+        showProtectedContent();
+    } else {
+        showPopup('არასწორი მომხმარებელი ან პაროლი');
+        usernameInput.value = '';
+        passwordInput.value = '';
+        usernameInput.focus();
+    }
+});
+
+logoutBtn.addEventListener('click', function() {
+    localStorage.removeItem('isLoggedIn');
+    showLoginForm();
+    showPopup('თქვენ გამოხვედით სისტემიდან');
+});
+
+addWebsiteBtn.addEventListener('click', function() {
+    modalTitle.textContent = 'ახალი გვერდი დამატება';
+    switchTab('add-tab');
+    websiteModal.style.display = 'flex';
+});
+
+modalTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+        const tabId = this.getAttribute('data-tab');
+        switchTab(tabId);
+    });
+});
+
+function switchTab(tabId) {
+    modalTabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-tab') === tabId) {
+            tab.classList.add('active');
         }
-        
-        // Close popup notification
-        popupClose.addEventListener('click', function() {
-            popupNotification.style.display = 'none';
-        });
-        
-        // Show confirmation modal
-        function showConfirmation(websiteName, onConfirm) {
-            confirmationMessage.textContent = `დარწმუნებული ხართ, რომ გსურთ გვერდის - "${websiteName}" წაშლა?`;
-            confirmationIcon.style.backgroundImage = `url("${deleteIconSVG}")`;
-            confirmationModal.style.display = 'flex';
-            
-            const confirmHandler = function() {
-                onConfirm();
-                confirmationModal.style.display = 'none';
-                confirmBtn.removeEventListener('click', confirmHandler);
-            };
-            
-            confirmBtn.addEventListener('click', confirmHandler);
+    });
+    
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === tabId) {
+            content.classList.add('active');
         }
+    });
+    
+    if (tabId === 'delete-tab') {
+        modalTitle.textContent = 'გვერდი წაშლა';
+        renderDeleteWebsiteList();
+    } else {
+        modalTitle.textContent = 'ახალი გვერდი დამატება';
+    }
+}
+
+cancelBtn.addEventListener('click', function() {
+    websiteModal.style.display = 'none';
+    addWebsiteForm.reset();
+});
+
+cancelDeleteBtn.addEventListener('click', function() {
+    websiteModal.style.display = 'none';
+});
+
+addWebsiteForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('websiteName').value;
+    const url = document.getElementById('websiteUrl').value;
+    const description = document.getElementById('websiteDescription').value;
+    
+    if (!name || !url || !description) {
+        showPopup('გთხოვთ შეავსოთ ყველა ველი');
+        return;
+    }
+    
+    let formattedUrl = url.trim();
+    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+        formattedUrl = 'https://' + formattedUrl;
+    }
+    
+    try {
+        new URL(formattedUrl);
+    } catch {
+        showPopup('გთხოვთ შეიყვანოთ სწორი URL მისამართი');
+        return;
+    }
+    
+    const newWebsite = {
+        name: name,
+        url: formattedUrl,
+        description: description,
+        icon: selectedIcon,
+        colorClass: selectedColorClass
+    };
+    
+    await addWebsiteToDatabase(newWebsite);
+    
+    websiteModal.style.display = 'none';
+    addWebsiteForm.reset();
+});
+
+async function deleteWebsite(id) {
+    await deleteWebsiteFromDatabase(id);
+    renderDeleteWebsiteList();
+}
+
         
-        // Close confirmation modal
-        cancelConfirmBtn.addEventListener('click', function() {
-            confirmationModal.style.display = 'none';
-            websiteToDelete = null;
-        });
+// Delete website
+async function deleteWebsite(id) {
+    await deleteWebsiteFromFirestore(id);
+    renderDeleteWebsiteList();
+}
+
+function renderDeleteWebsiteList() {
+    if (!deleteWebsiteList) return;
+    
+    deleteWebsiteList.innerHTML = '';
+    
+    if (websites.length === 0) {
+        deleteWebsiteList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">ვებსაიტები არ მოიძებნა</p>';
+        return;
+    }
+    
+    websites.forEach(website => {
+        const websiteItem = document.createElement('div');
+        websiteItem.className = 'delete-website-item';
         
-        // Login functionality
-        loginBtn.addEventListener('click', function() {
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
+        const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
+        
+        websiteItem.innerHTML = `
+            <div class="website-item-info">
+                <div class="${website.colorClass}" style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i class="${iconInfo.iconClass}" style="color: white; font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                    <div class="website-item-name">${escapeHtml(website.name)}</div>
+                    <div class="website-item-url">${escapeHtml(website.url)}</div>
+                </div>
+            </div>
+            <button class="delete-item-btn" data-id="${website.id}">წაშლა</button>
+        `;
+        
+        deleteWebsiteList.appendChild(websiteItem);
+    });
+    
+    document.querySelectorAll('.delete-item-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const website = websites.find(w => w.id === id);
             
-            if (!username || !password) {
-                showPopup('გთხოვთ შეავსოთ ორივე ველი');
-                return;
-            }
-            
-            if (username === correctUsername && password === correctPassword) {
-                localStorage.setItem('isLoggedIn', 'true');
-                showProtectedContent();
-            } else {
-                showPopup('არასწორი მომხმარებელი ან პაროლი');
-                usernameInput.value = '';
-                passwordInput.value = '';
-                usernameInput.focus();
-            }
+            showConfirmation(
+                website.name,
+                () => deleteWebsite(id)
+            );
         });
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function renderWebsites() {
+    if (!protectedContent || protectedContent.style.display === 'none') return;
+    if (!websitesGrid) return;
+    
+    websitesGrid.innerHTML = '';
+    
+    websites.forEach(website => {
+        const card = document.createElement('div');
+        card.className = 'website-card';
+        card.setAttribute('data-id', website.id);
         
-        // Logout functionality
-        logoutBtn.addEventListener('click', function() {
-            localStorage.removeItem('isLoggedIn');
-            showLoginForm();
-            showPopup('თქვენ გამოხვედით სისტემიდან');
-        });
+        const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
         
-        // Add website button click
-        addWebsiteBtn.addEventListener('click', function() {
-            modalTitle.textContent = 'ახალი გვერდი დამატება';
-            switchTab('add-tab');
-            websiteModal.style.display = 'flex';
-        });
+        card.innerHTML = `
+            <div class="card-header ${website.colorClass}">
+                <i class="${iconInfo.iconClass} fa-3x" style="color: white;"></i>
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">${escapeHtml(website.name)}</h3>
+                <p class="card-desc">${escapeHtml(website.description)}</p>
+            </div>
+        `;
         
-        // Modal tab switching
-        modalTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-                switchTab(tabId);
-            });
-        });
-        
-        function switchTab(tabId) {
-            modalTabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.getAttribute('data-tab') === tabId) {
-                    tab.classList.add('active');
-                }
-            });
-            
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-            
-            if (tabId === 'delete-tab') {
-                modalTitle.textContent = 'გვერდი წაშლა';
-                renderDeleteWebsiteList();
-            } else {
-                modalTitle.textContent = 'ახალი გვერდი დამატება';
-            }
-        }
-        
-        // Close modal
-        cancelBtn.addEventListener('click', function() {
-            websiteModal.style.display = 'none';
-            addWebsiteForm.reset();
-        });
-        
-        cancelDeleteBtn.addEventListener('click', function() {
-            websiteModal.style.display = 'none';
-        });
-        
-        // Add website form submission
-        addWebsiteForm.addEventListener('submit', function(e) {
+        card.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            const name = document.getElementById('websiteName').value;
-            const url = document.getElementById('websiteUrl').value;
-            const description = document.getElementById('websiteDescription').value;
-            
-            if (!name || !url || !description) {
-                showPopup('გთხოვთ შეავსოთ ყველა ველი');
-                return;
-            }
-            
-            let formattedUrl = url.trim();
-            if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-                formattedUrl = 'https://' + formattedUrl;
-            }
-            
-            try {
-                new URL(formattedUrl);
-            } catch {
-                showPopup('გთხოვთ შეიყვანოთ სწორი URL მისამართი');
-                return;
-            }
-            
-            const newWebsite = {
-                id: nextWebsiteId++,
-                name: name,
-                url: formattedUrl,
-                description: description,
-                icon: selectedIcon,
-                colorClass: selectedColorClass
-            };
-            
-            websites.push(newWebsite);
-            saveWebsites();
-            renderWebsites();
-            
-            websiteModal.style.display = 'none';
-            addWebsiteForm.reset();
-            
-            showPopup('გვერდი წარმატებით დაემატა', true);
+            window.location.href = website.url;
         });
         
-        // Delete website
-        function deleteWebsite(id) {
-            websites = websites.filter(website => website.id !== id);
-            saveWebsites();
-            renderWebsites();
-            renderDeleteWebsiteList();
-            showPopup('გვერდი წარმატებით წაიშალა');
-        }
-        
-        // Render delete website list
-        function renderDeleteWebsiteList() {
-            deleteWebsiteList.innerHTML = '';
-            
-            if (websites.length === 0) {
-                deleteWebsiteList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">ვებსაიტები არ მოიძებნა</p>';
-                return;
-            }
-            
-            websites.forEach(website => {
-                const websiteItem = document.createElement('div');
-                websiteItem.className = 'delete-website-item';
-                
-                const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
-                
-                websiteItem.innerHTML = `
-                    <div class="website-item-info">
-                        <div class="${website.colorClass}" style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                            <i class="${iconInfo.iconClass}" style="color: white; font-size: 1.2rem;"></i>
-                        </div>
-                        <div>
-                            <div class="website-item-name">${website.name}</div>
-                            <div class="website-item-url">${website.url}</div>
-                        </div>
-                    </div>
-                    <button class="delete-item-btn" data-id="${website.id}">წაშლა</button>
-                `;
-                
-                deleteWebsiteList.appendChild(websiteItem);
-            });
-            
-            document.querySelectorAll('.delete-item-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const id = parseInt(this.getAttribute('data-id'));
-                    const website = websites.find(w => w.id === id);
-                    
-                    showConfirmation(
-                        website.name,
-                        () => deleteWebsite(id)
-                    );
-                });
-            });
-        }
-        
-        // Render websites to the grid
-        function renderWebsites() {
-            websitesGrid.innerHTML = '';
-            
-            websites.forEach(website => {
-                const card = document.createElement('div');
-                card.className = 'website-card';
-                card.setAttribute('data-id', website.id);
-                
-                // Find icon info
-                const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
-                
-                card.innerHTML = `
-                    <div class="card-header ${website.colorClass}">
-                        <i class="${iconInfo.iconClass} fa-3x" style="color: white;"></i>
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">${website.name}</h3>
-                        <p class="card-desc">${website.description}</p>
-                    </div>
-                `;
-                
-                // Click entire card to navigate to website (same window)
-                card.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = website.url;
-                });
-                
-                websitesGrid.appendChild(card);
-            });
-        }
+        websitesGrid.appendChild(card);
+    });
+}
         
         // Save websites to localStorage
         function saveWebsites() {
@@ -1461,70 +1557,57 @@ function restoreDefaultWebsites() {
     // The popup will show when the user logs in if needed
 }
         
-// Functions to show/hide content
 function showProtectedContent() {
     authForm.style.display = 'none';
     userInfo.style.display = 'flex';
     loginMessage.style.display = 'none';
     protectedContent.style.display = 'block';
     
-    // Check if we need to show restoration message
-    const defaultWebsiteNames = ['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'];
-    const hasAllDefaults = defaultWebsiteNames.every(name => 
-        websites.some(website => website.name === name)
-    );
-    
-    if (!hasAllDefaults) {
-        // Force restore if still missing
-        restoreDefaultWebsites();
-        showPopup('ნაგულისხმევი ვებსაიტები აღდგენილია', true);
-    }
-    
     renderWebsites();
     
-    // Animate cards
-    const cards = document.querySelectorAll('.website-card');
-    cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 150);
-    });
-}
-        
-        function showLoginForm() {
-            authForm.style.display = 'flex';
-            userInfo.style.display = 'none';
-            loginMessage.style.display = 'flex';
-            protectedContent.style.display = 'none';
+    setTimeout(() => {
+        const cards = document.querySelectorAll('.website-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
             
-            usernameInput.value = '';
-            passwordInput.value = '';
-            usernameInput.focus();
-            
-            if (window.innerWidth <= 900) {
-                authForm.style.flexDirection = 'column';
-                authForm.style.alignItems = 'center';
-                authForm.style.gap = '10px';
-            }
-        }
-        
-        // Responsive adjustment for auth form
-        window.addEventListener('resize', function() {
-            if (window.innerWidth <= 900) {
-                authForm.style.flexDirection = 'column';
-                authForm.style.alignItems = 'center';
-                authForm.style.gap = '10px';
-            } else {
-                authForm.style.flexDirection = 'row';
-                authForm.style.alignItems = 'center';
-                authForm.style.gap = '15px';
-            }
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 150);
         });
+    }, 100);
+}
+
+function showLoginForm() {
+    authForm.style.display = 'flex';
+    userInfo.style.display = 'none';
+    loginMessage.style.display = 'flex';
+    protectedContent.style.display = 'none';
+    
+    usernameInput.value = '';
+    passwordInput.value = '';
+    usernameInput.focus();
+    
+    if (window.innerWidth <= 900) {
+        authForm.style.flexDirection = 'column';
+        authForm.style.alignItems = 'center';
+        authForm.style.gap = '10px';
+    }
+}
+
+window.addEventListener('resize', function() {
+    if (window.innerWidth <= 900) {
+        authForm.style.flexDirection = 'column';
+        authForm.style.alignItems = 'center';
+        authForm.style.gap = '10px';
+    } else {
+        authForm.style.flexDirection = 'row';
+        authForm.style.alignItems = 'center';
+        authForm.style.gap = '15px';
+    }
+});
     </script>
 </body>
 </html>
