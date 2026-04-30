@@ -106,6 +106,23 @@
             transform: translateY(-2px);
         }
         
+        .edit-website-btn {
+            padding: 8px 20px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .edit-website-btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
         .auth-form {
             display: flex;
             background: rgba(255, 255, 255, 0.15);
@@ -393,7 +410,7 @@
         
         .modal-content {
             background: white;
-            border-radius: 12px; /* All corners have same radius now */
+            border-radius: 12px;
             padding: 30px;
             width: 90%;
             max-width: 600px;
@@ -431,7 +448,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
-            border-radius: 6px 6px 0 0; /* All tabs have rounded corners */
+            border-radius: 6px 6px 0 0;
         }
         
         .modal-tab.active {
@@ -638,7 +655,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            filter: brightness(0) invert(1); /* Makes SVG white */
+            filter: brightness(0) invert(1);
         }
         
         /* For smaller icons */
@@ -648,7 +665,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            filter: brightness(0) invert(1); /* Makes SVG white */
+            filter: brightness(0) invert(1);
         }
         
         /* Login Animation */
@@ -796,7 +813,7 @@
 <!-- Firebase SDKs for Realtime Database -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+  import { getDatabase, ref, onValue, push, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
   
   const firebaseConfig = {
     apiKey: "AIzaSyA36t5PGnSCvMwW9oUDQmJC1fE8bdGxD1Q",
@@ -816,6 +833,7 @@
   window.onValue = onValue;
   window.push = push;
   window.remove = remove;
+  window.set = set;
 </script>
 
 </head>
@@ -829,7 +847,7 @@
         </div>
     </div>
     
-    <!-- Confirmation Modal - UPDATED DESIGN -->
+    <!-- Confirmation Modal -->
     <div class="confirmation-modal" id="confirmationModal">
         <div class="confirmation-content">
             <div class="confirmation-icon" id="confirmationIcon"></div>
@@ -842,7 +860,7 @@
         </div>
     </div>
     
-    <!-- Add/Delete Website Modal -->
+    <!-- Add/Delete/Edit Website Modal -->
     <div class="modal-overlay" id="websiteModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -852,6 +870,7 @@
             <div class="modal-tabs">
                 <button class="modal-tab active" data-tab="add-tab">დამატება</button>
                 <button class="modal-tab" data-tab="delete-tab">წაშლა</button>
+                <button class="modal-tab" data-tab="edit-tab">აღწერის შეცვლა</button>
             </div>
             
             <!-- Add Website Tab -->
@@ -891,6 +910,16 @@
                     <button type="button" class="btn-secondary" id="cancelDeleteBtn">გაუქმება</button>
                 </div>
             </div>
+            
+            <!-- Edit Description Tab -->
+            <div class="tab-content" id="edit-tab">
+                <div class="delete-website-list" id="editWebsiteList">
+                    <!-- Websites for editing description will be dynamically added here -->
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelEditBtn">გაუქმება</button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -905,7 +934,10 @@
                 <div class="user-info" id="userInfo">
                     <span class="user-name">ალექსი შოგირაძე</span>
                     <button class="add-website-btn" id="addWebsiteBtn">
-                        <i class="fas fa-plus"></i>ვებგვერდის დამატება
+                        <i class="fas fa-plus"></i> დამატება
+                    </button>
+                    <button class="edit-website-btn" id="editWebsiteBtn">
+                        <i class="fas fa-edit"></i> რედაქტირება
                     </button>
                     <button class="logout-btn" id="logoutBtn">გასვლა</button>
                 </div>
@@ -943,6 +975,7 @@ const userInfo = document.getElementById('userInfo');
 const loginBtn = document.getElementById('loginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const addWebsiteBtn = document.getElementById('addWebsiteBtn');
+const editWebsiteBtn = document.getElementById('editWebsiteBtn');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const loginMessage = document.getElementById('loginMessage');
@@ -954,9 +987,11 @@ const websiteModal = document.getElementById('websiteModal');
 const addWebsiteForm = document.getElementById('addWebsiteForm');
 const cancelBtn = document.getElementById('cancelBtn');
 const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
 const websitesGrid = document.getElementById('websitesGrid');
 const iconSelection = document.getElementById('iconSelection');
 const deleteWebsiteList = document.getElementById('deleteWebsiteList');
+const editWebsiteList = document.getElementById('editWebsiteList');
 const modalTabs = document.querySelectorAll('.modal-tab');
 const tabContents = document.querySelectorAll('.tab-content');
 const modalTitle = document.getElementById('modalTitle');
@@ -1011,6 +1046,7 @@ let websites = [];
 let selectedIcon = 'money';
 let selectedColorClass = 'vali-bg';
 let websiteToDelete = null;
+let websiteToEdit = null;
 
 // Simple delete confirmation icon
 const deleteIconSVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Cpath d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z'/%3E%3C/svg%3E";
@@ -1052,9 +1088,8 @@ function loadWebsitesFromDatabase() {
             createDefaultWebsites();
         } else {
             renderWebsites();
-            if (document.getElementById('delete-tab') && document.getElementById('delete-tab').classList.contains('active')) {
-                renderDeleteWebsiteList();
-            }
+            renderDeleteWebsiteList();
+            renderEditWebsiteList();
         }
     }, (error) => {
         console.error('Error loading websites:', error);
@@ -1105,7 +1140,6 @@ async function createDefaultWebsites() {
     const websitesRef = window.ref(window.db, DB_PATH);
     
     for (const website of defaultWebsites) {
-        const newWebsiteRef = window.push(websitesRef);
         await window.push(websitesRef, website);
     }
     
@@ -1136,6 +1170,26 @@ async function deleteWebsiteFromDatabase(websiteId) {
     } catch (error) {
         console.error('Error deleting website:', error);
         showPopup('შეცდომა გვერდის წაშლისას', false);
+        return false;
+    }
+}
+
+// Update website description in Realtime Database
+async function updateWebsiteDescription(websiteId, newDescription) {
+    try {
+        const websiteRef = window.ref(window.db, `${DB_PATH}/${websiteId}`);
+        const website = websites.find(w => w.id === websiteId);
+        if (website) {
+            await window.set(websiteRef, {
+                ...website,
+                description: newDescription
+            });
+            showPopup('აღწერა წარმატებით განახლდა', true);
+        }
+        return true;
+    } catch (error) {
+        console.error('Error updating description:', error);
+        showPopup('შეცდომა აღწერის განახლებისას', false);
         return false;
     }
 }
@@ -1245,13 +1299,15 @@ function showConfirmation(websiteName, onConfirm) {
         confirmBtn.removeEventListener('click', confirmHandler);
     };
     
+    const cancelHandler = function() {
+        confirmationModal.style.display = 'none';
+        cancelConfirmBtn.removeEventListener('click', cancelHandler);
+        confirmBtn.removeEventListener('click', confirmHandler);
+    };
+    
     confirmBtn.addEventListener('click', confirmHandler);
+    cancelConfirmBtn.addEventListener('click', cancelHandler);
 }
-
-cancelConfirmBtn.addEventListener('click', function() {
-    confirmationModal.style.display = 'none';
-    websiteToDelete = null;
-});
 
 loginBtn.addEventListener('click', function() {
     const username = usernameInput.value.trim();
@@ -1285,6 +1341,13 @@ addWebsiteBtn.addEventListener('click', function() {
     websiteModal.style.display = 'flex';
 });
 
+editWebsiteBtn.addEventListener('click', function() {
+    modalTitle.textContent = 'აღწერის რედაქტირება';
+    switchTab('edit-tab');
+    websiteModal.style.display = 'flex';
+    renderEditWebsiteList();
+});
+
 modalTabs.forEach(tab => {
     tab.addEventListener('click', function() {
         const tabId = this.getAttribute('data-tab');
@@ -1310,6 +1373,9 @@ function switchTab(tabId) {
     if (tabId === 'delete-tab') {
         modalTitle.textContent = 'გვერდი წაშლა';
         renderDeleteWebsiteList();
+    } else if (tabId === 'edit-tab') {
+        modalTitle.textContent = 'აღწერის რედაქტირება';
+        renderEditWebsiteList();
     } else {
         modalTitle.textContent = 'ახალი გვერდი დამატება';
     }
@@ -1321,6 +1387,10 @@ cancelBtn.addEventListener('click', function() {
 });
 
 cancelDeleteBtn.addEventListener('click', function() {
+    websiteModal.style.display = 'none';
+});
+
+cancelEditBtn.addEventListener('click', function() {
     websiteModal.style.display = 'none';
 });
 
@@ -1362,18 +1432,6 @@ addWebsiteForm.addEventListener('submit', async function(e) {
     addWebsiteForm.reset();
 });
 
-async function deleteWebsite(id) {
-    await deleteWebsiteFromDatabase(id);
-    renderDeleteWebsiteList();
-}
-
-        
-// Delete website
-async function deleteWebsite(id) {
-    await deleteWebsiteFromFirestore(id);
-    renderDeleteWebsiteList();
-}
-
 function renderDeleteWebsiteList() {
     if (!deleteWebsiteList) return;
     
@@ -1414,8 +1472,56 @@ function renderDeleteWebsiteList() {
             
             showConfirmation(
                 website.name,
-                () => deleteWebsite(id)
+                () => deleteWebsiteFromDatabase(id)
             );
+        });
+    });
+}
+
+function renderEditWebsiteList() {
+    if (!editWebsiteList) return;
+    
+    editWebsiteList.innerHTML = '';
+    
+    if (websites.length === 0) {
+        editWebsiteList.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">ვებსაიტები არ მოიძებნა</p>';
+        return;
+    }
+    
+    websites.forEach(website => {
+        const websiteItem = document.createElement('div');
+        websiteItem.className = 'delete-website-item';
+        
+        const iconInfo = vectorIcons.find(icon => icon.id === website.icon) || vectorIcons[0];
+        
+        websiteItem.innerHTML = `
+            <div class="website-item-info">
+                <div class="${website.colorClass}" style="width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <i class="${iconInfo.iconClass}" style="color: white; font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                    <div class="website-item-name">${escapeHtml(website.name)}</div>
+                    <div class="website-item-url" style="font-size: 0.7rem; max-width: 200px;">${escapeHtml(website.description.substring(0, 60))}...</div>
+                </div>
+            </div>
+            <button class="delete-item-btn edit-desc-btn" data-id="${website.id}" style="background: #f39c12;">რედაქტირება</button>
+        `;
+        
+        editWebsiteList.appendChild(websiteItem);
+    });
+    
+    document.querySelectorAll('.edit-desc-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const website = websites.find(w => w.id === id);
+            
+            const newDescription = prompt('შეიყვანეთ ახალი აღწერა:', website.description);
+            if (newDescription !== null && newDescription.trim() !== '') {
+                updateWebsiteDescription(id, newDescription.trim());
+            } else if (newDescription !== null) {
+                showPopup('აღწერა არ შეიძლება იყოს ცარიელი', false);
+            }
         });
     });
 }
@@ -1457,106 +1563,7 @@ function renderWebsites() {
         websitesGrid.appendChild(card);
     });
 }
-        
-        // Save websites to localStorage
-        function saveWebsites() {
-            localStorage.setItem('websites', JSON.stringify(websites));
-            localStorage.setItem('nextWebsiteId', nextWebsiteId.toString());
-        }
-        
-// Load websites from localStorage
-function loadSavedWebsites() {
-    const savedWebsites = localStorage.getItem('websites');
-    const savedNextId = localStorage.getItem('nextWebsiteId');
-    
-    if (savedWebsites) {
-        websites = JSON.parse(savedWebsites);
-    }
-    
-    if (savedNextId) {
-        nextWebsiteId = parseInt(savedNextId);
-    }
-    
-    // AUTO-RESTORE: Check if we have the 5 default websites
-    // If not, restore them automatically
-    const defaultWebsiteNames = ['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'];
-    const hasAllDefaults = defaultWebsiteNames.every(name => 
-        websites.some(website => website.name === name)
-    );
-    
-    if (!hasAllDefaults || websites.length === 0) {
-        console.log('Restoring default websites...');
-        restoreDefaultWebsites();
-    }
-    
-    // Don't render websites here - wait for login
-}
 
-// Function to restore default websites
-// Function to restore default websites
-function restoreDefaultWebsites() {
-    // Keep any existing custom websites
-    const customWebsites = websites.filter(website => 
-        !['ვალი', 'რეზიდენტურა', 'ცვლა', 'გერმანული', 'MCG'].includes(website.name)
-    );
-    
-    // Default websites
-    const defaultWebsites = [
-        {
-            id: 1,
-            name: 'ვალი',
-            url: 'https://uunimed.github.io/vali/',
-            description: 'საკრედიტო დავალიანების მართვის სისტემა. თვალყური ადევნეთ ვალებს, გადახდების გრაფიკებს და ფინანსურ ანგარიშს.',
-            icon: 'money',
-            colorClass: 'vali-bg'
-        },
-        {
-            id: 2,
-            name: 'რეზიდენტურა',
-            url: 'https://uunimed.github.io/rezidentura/',
-            description: 'სამედიცინო რეზიდენტურის გამოცდების მომზადების პლატფორმა. ტესტები, საგამოცდო მასალები და შეფასების სისტემა.',
-            icon: 'exam',
-            colorClass: 'rezidentura-bg'
-        },
-        {
-            id: 3,
-            name: 'ცვლა',
-            url: 'https://uunimed.github.io/shift/',
-            description: 'ცვლის განრიგის და სასწავლო დღეების მართვის სისტემა. დაგეგმეთ ცვლები, გაკვეთილები და სასწავლო სესიები.',
-            icon: 'calendar',
-            colorClass: 'shift-bg'
-        },
-        {
-            id: 4,
-            name: 'გერმანული',
-            url: 'https://uunimed.github.io/deutsch/',
-            description: 'გერმანული ენის სწავლების აპლიკაცია. ლექსიკა, გრამატიკა, სავარჯიშოები და ენის ტესტები.',
-            icon: 'language',
-            colorClass: 'deutsch-bg'
-        },
-        {
-            id: 5,
-            name: 'MCG',
-            url: 'https://uunimed.github.io/mcg/',
-            description: 'ცვლის მენეჯმენტისა და პერსონალის მართვის სისტემა. ოპტიმიზაცია და კონტროლ სამუშაო გრაფიკებისთვის.',
-            icon: 'users',
-            colorClass: 'mcg-bg'
-        }
-    ];
-    
-    // Combine defaults with any custom websites
-    websites = [...defaultWebsites, ...customWebsites];
-    
-    // Update nextWebsiteId to avoid conflicts
-    const maxId = Math.max(...websites.map(w => w.id), 5);
-    nextWebsiteId = maxId + 1;
-    
-    saveWebsites();
-    
-    // Don't show popup during page load - it interferes with login
-    // The popup will show when the user logs in if needed
-}
-        
 function showProtectedContent() {
     authForm.style.display = 'none';
     userInfo.style.display = 'flex';
